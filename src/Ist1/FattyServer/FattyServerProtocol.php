@@ -91,9 +91,11 @@ class FattyServerProtocol implements FattyComponentInterface
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \Exception
-     * @throws JsonException
+     * @param FattyConnection $fattyConnFrom
+     * @param $data string
+     * @return void
+     * @throws \Ratchet\Wamp\JsonException
+     * @throws \UnexpectedValueException
      */
     public function onMessage(FattyConnection $fattyConnFrom, $data)
     {
