@@ -1,0 +1,162 @@
+<?php
+
+namespace FattyServer;
+
+use FattyServer\Packet\Input\InputPacketMapper;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Packet\Output\ChatMessage;
+use FattyServer\Packet\Output\Login as LoginOut;
+use FattyServer\Packet\Output\NewPlayer;
+use FattyServer\Packet\Output\PlayerList;
+use FattyServer\Packet\Input\Login as LoginIn;
+use FattyServer\Player\Player;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\Table;
+use FattyServer\Table\TableManager;
+use Ratchet\Wamp\JsonException;
+use Ratchet\ConnectionInterface;
+
+
+/**
+ * Fatty Messaging Protocol
+ *
+ * +--------------+----+------------------+
+ * | Message Type | ID | DIRECTION        |
+ * |--------------+----+------------------+
+ * | WELCOME      | 0  | Server-to-Client |
+ * | LOGIN        | 1  | Bi-Directional   |
+ * | GATHERING    | 2  | Server-to-Client |
+ * | PLAYERS_LIST | 9  | Server-to-Client |
+ * | NEW_PLAYER   | 3  | Server-to-Client |
+ * | GAME_START   | 4  | Server-to-Client |
+ * | CARDS        | 5  | Server-to-Client |
+ * | PUT_CARD     | 6  | Bi-Directional   |
+ * | PLAYER_WON   | 7  | Server-to-Client |
+ * | GAME_END     | 8  | Server-to-Client |
+ * | CHAT_MESSAGE | 10 | Bi-Directional   |
+ * +--------------+----+------------------+
+ */
+class FattyServerProtocol implements FattyComponentInterface
+{
+    const MSG_WELCOME = 0;
+    const MSG_LOGIN = 1;
+    const MSG_GATHERING = 2;
+    const MSG_PLAYERS_LIST = 9;
+    const MSG_NEW_PLAYER = 3;
+    const MSG_GAME_START = 4;
+    const MSG_CARDS = 5;
+    const MSG_PUT_CARD = 6;
+    const MSG_PLAYER_WON = 7;
+    const MSG_GAME_END = 8;
+    const MSG_CHAT_MESSAGE = 10;
+
+
+    /**
+     * @var FattyServer
+     */
+    protected $server;
+
+    /**
+     * @var PlayerManager
+     */
+    protected $playerManager;
+
+    /**
+     * @var TableManager
+     */
+    protected $tableManager;
+
+    /**
+     * @var PacketPropagator
+     */
+    protected $propagator;
+
+    /**
+     * Construct.
+     */
+    public function __construct(FattyServer $srv)
+    {
+        $this->server = $srv;
+        $this->playerManager = new PlayerManager();
+        $this->tableManager = new TableManager();
+        $this->propagator = new PacketPropagator($this->playerManager, $this->tableManager);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onOpen(ConnectionInterface $conn)
+    {
+        echo "Connection {$conn->resourceId} has connected\n";
+    }
+
+    /**
+     * {@inheritdoc}
+     * @throws \Exception
+     * @throws JsonException
+     */
+    public function onMessage(FattyConnection $fattyConnFrom, $data)
+    {
+        if (null === ($json = @json_decode($data, true))) {
+            throw new JsonException;
+        }
+
+        if (!is_array($json) || count($json) < 1) {
+            throw new \UnexpectedValueException("Invalid message format");
+        }
+
+        $packet = InputPacketMapper::map($json);
+        $packet->getHandler()->handle($fattyConnFrom, $this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onClose(ConnectionInterface $conn)
+    {
+        echo "Connection {$conn->resourceId} has disconnected\n";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onError(ConnectionInterface $conn, \Exception $e)
+    {
+        //return $this->_decorating->onError($this->connections[$conn], $e);
+        echo "An error has occurred: {$e->getMessage()}\n";
+
+        $conn->close();
+    }
+
+    /**
+     * @return \FattyServer\Player\PlayerManager
+     */
+    public function getPlayerManager()
+    {
+        return $this->playerManager;
+    }
+
+    /**
+     * @return \FattyServer\Packet\Output\PacketPropagator
+     */
+    public function getPropagator()
+    {
+        return $this->propagator;
+    }
+
+    /**
+     * @return \FattyServer\FattyServer
+     */
+    public function getServer()
+    {
+        return $this->server;
+    }
+
+    /**
+     * @return \FattyServer\Table\TableManager
+     */
+    public function getTableManager()
+    {
+        return $this->tableManager;
+    }
+}

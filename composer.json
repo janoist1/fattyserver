@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-0": {
+            "FattyServer": "src/Ist1"
+        }
+    },
+    "require": {
+        "cboden/Ratchet": "0.3.*"
+    }
+}
