@@ -25,6 +25,7 @@ use Ratchet\ConnectionInterface;
  * |--------------+----+------------------+
  * | WELCOME      | 0  | Server-to-Client |
  * | LOGIN        | 1  | Bi-Directional   |
+ * | TABLES_LIST  | 12 | Server-to-Client |
  * | GATHERING    | 2  | Server-to-Client |
  * | PLAYERS_LIST | 9  | Server-to-Client |
  * | PLAYER_READY | 11 | Client-to-Server |
@@ -41,6 +42,7 @@ class FattyServerProtocol implements FattyComponentInterface
 {
     const MSG_WELCOME = 0;
     const MSG_LOGIN = 1;
+    const MSG_TABLES_LIST = 12;
     const MSG_GATHERING = 2;
     const MSG_PLAYERS_LIST = 9;
     const MSG_PLAYER_READY = 11;
