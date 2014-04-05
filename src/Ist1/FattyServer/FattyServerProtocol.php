@@ -103,10 +103,6 @@ class FattyServerProtocol implements FattyComponentInterface
             throw new JsonException;
         }
 
-        if (!is_array($json) || count($json) < 1) {
-            throw new \UnexpectedValueException("Invalid message format");
-        }
-
         $packet = InputPacketMapper::map($json);
         $packet->getHandler()->handle($fattyConnFrom, $this);
     }
