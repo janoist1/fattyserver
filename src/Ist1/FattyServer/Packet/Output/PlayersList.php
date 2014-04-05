@@ -6,7 +6,7 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class PlayerList extends AbstractOutputPacket
+class PlayersList extends AbstractOutputPacket
 {
     /**
      * @var \SplObjectStorage

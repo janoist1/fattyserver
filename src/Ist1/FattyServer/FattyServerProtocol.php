@@ -7,7 +7,7 @@ use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Packet\Output\ChatMessage;
 use FattyServer\Packet\Output\Login as LoginOut;
 use FattyServer\Packet\Output\NewPlayer;
-use FattyServer\Packet\Output\PlayerList;
+use FattyServer\Packet\Output\PlayersList;
 use FattyServer\Packet\Input\Login as LoginIn;
 use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;

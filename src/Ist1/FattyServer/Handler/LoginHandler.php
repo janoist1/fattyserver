@@ -7,7 +7,7 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\Login as LoginIn;
 use FattyServer\Packet\Output\Login as LoginOut;
 use FattyServer\Packet\Output\NewPlayer;
-use FattyServer\Packet\Output\PlayerList;
+use FattyServer\Packet\Output\PlayersList;
 
 
 class LoginHandler implements HandlerInterface
@@ -38,7 +38,7 @@ class LoginHandler implements HandlerInterface
 
         $fattyConnFrom->sendPacket(new LoginOut());
         $fattyConnFrom->sendPacket(
-            new PlayerList($serverProtocol->getPlayerManager()->getPlayers())
+            new PlayersList($serverProtocol->getPlayerManager()->getPlayers())
         );
 
         $serverProtocol->getPropagator()->sendPacketToPlayers(
