@@ -3,23 +3,22 @@
 namespace FattyServer\Packet\Output;
 
 use FattyServer\FattyServerProtocol;
+use FattyServer\Table\Table;
 
 
 class Gathering extends AbstractOutputPacket
 {
     /**
-     * Table ID
-     *
-     * @var string
+     * @var Table
      */
-    protected $id;
+    protected $table;
 
     /**
      * @param $id
      */
-    function __construct($id)
+    function __construct(Table $table)
     {
-        $this->id = $id;
+        $this->table = $table;
     }
 
     /**
@@ -28,7 +27,7 @@ class Gathering extends AbstractOutputPacket
     public function getData()
     {
         $data = array(
-            'table_id' => $this->id
+            'table_id' => $this->table->getId()
         );
 
         return $data;
