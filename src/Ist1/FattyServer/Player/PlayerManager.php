@@ -22,7 +22,7 @@ class PlayerManager extends PlayerStorage
      * @param $name
      * @return Player
      */
-    public function createPlayer(FattyConnection $conn, $name)
+    public static function createPlayer(FattyConnection $conn, $name)
     {
         return new Player($conn, $name);
     }
@@ -37,7 +37,7 @@ class PlayerManager extends PlayerStorage
      */
     public function createAndAddPlayer(FattyConnection $conn, $name)
     {
-        $player = $this->createPlayer($conn, $name);
+        $player = self::createPlayer($conn, $name);
         $this->addPlayer($player);
 
         return $player;
