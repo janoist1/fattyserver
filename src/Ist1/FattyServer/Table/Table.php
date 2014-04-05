@@ -46,10 +46,18 @@ class Table extends PlayerStorage
     }
 
     /**
-     * @return \SplObjectStorage
+     * @return bool
      */
-    public function getPlayers()
+    public function isReady()
     {
-        return $this->players;
+        foreach ($this->players as $conn) {
+            /** @var Player $player */
+            $player = $this->players[$conn];
+            if (!$player->isReady()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 } 
