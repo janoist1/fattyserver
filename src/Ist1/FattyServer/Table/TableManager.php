@@ -114,12 +114,4 @@ class TableManager
     {
         return $this->tables;
     }
-
-    /**
-     * @return \SplObjectStorage
-     */
-    public function getPlayers()
-    {
-        return $this->players;
-    }
 } 
