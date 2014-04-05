@@ -6,38 +6,18 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class PlayersList extends AbstractOutputPacket
+class PlayersList extends AbstractListOutputPacket
 {
     /**
-     * @var \SplObjectStorage
-     */
-    protected $players;
-
-    /**
-     * @param \SplObjectStorage $players
-     */
-    function __construct(\SplObjectStorage $players)
-    {
-        $this->players = $players;
-    }
-
-    /**
+     * @param Player $table
      * @return array
      */
-    public function getData()
+    public function getItemData($table)
     {
-        $data = array();
-
-        /** @var Player $player */
-        foreach ($this->players as $conn) {
-            $player = $this->players[$conn];
-            $data[] = array(
-                'id' => $player->getId(),
-                'name' => $player->getName(),
-            );
-        }
-
-        return $data;
+        return array(
+            'id' => $table->getId(),
+            'name' => $table->getName(),
+        );
     }
 
     /**
@@ -46,5 +26,13 @@ class PlayersList extends AbstractOutputPacket
     public function getType()
     {
         return FattyServerProtocol::MSG_PLAYERS_LIST;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDataStorage()
+    {
+        return true;
     }
 } 
