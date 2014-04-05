@@ -1,12 +1,12 @@
 <?php
 
-namespace FattyServer\Packet\Output;
+namespace FattyServer\Packet\Output\PlayersList;
 
 use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class PlayersList extends AbstractListOutputPacket
+class PlayersList extends AbstractPlayersList
 {
     /**
      * @param Player $table
@@ -26,13 +26,5 @@ class PlayersList extends AbstractListOutputPacket
     public function getType()
     {
         return FattyServerProtocol::MSG_PLAYERS_LIST;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDataStorage()
-    {
-        return true;
     }
 } 
