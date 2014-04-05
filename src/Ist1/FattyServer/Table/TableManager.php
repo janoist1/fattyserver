@@ -26,7 +26,7 @@ class TableManager
      * @param $name
      * @return Table
      */
-    public function createTable($name)
+    public static function createTable($name)
     {
         return new Table($name);
     }
@@ -68,7 +68,7 @@ class TableManager
      */
     public function createAndAddTable($name)
     {
-        $table = $this->createTable($name);
+        $table = self::createTable($name);
         $this->addTable($table);
 
         return $table;
