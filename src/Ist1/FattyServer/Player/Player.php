@@ -17,11 +17,17 @@ class Player
      */
     protected $name;
 
+    /**
+     * @var bool
+     */
+    protected $isReady;
+
 
     function __construct(FattyConnection $conn, $name)
     {
         $this->connection = $conn;
         $this->name = $name;
+        $this->isReady = false;
     }
 
     /**
@@ -47,4 +53,21 @@ class Player
     {
         return $this->connection->getId();
     }
+
+    /**
+     * @param boolean $isReady
+     */
+    public function setReady($isReady)
+    {
+        $this->isReady = $isReady;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isReady()
+    {
+        return $this->isReady;
+    }
+
 }
