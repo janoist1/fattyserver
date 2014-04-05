@@ -20,31 +20,35 @@ use Ratchet\ConnectionInterface;
 /**
  * Fatty Messaging Protocol
  *
- * +--------------+----+------------------+
- * | Message Type | ID | DIRECTION        |
- * |--------------+----+------------------+
- * | WELCOME      | 0  | Server-to-Client |
- * | LOGIN        | 1  | Bi-Directional   |
- * | TABLES_LIST  | 12 | Server-to-Client |
- * | GATHERING    | 2  | Server-to-Client |
- * | PLAYERS_LIST | 9  | Server-to-Client |
- * | PLAYER_READY | 11 | Client-to-Server |
- * | NEW_PLAYER   | 3  | Server-to-Client |
- * | GAME_START   | 4  | Server-to-Client |
- * | CARDS        | 5  | Server-to-Client |
- * | PUT_CARD     | 6  | Bi-Directional   |
- * | PLAYER_WON   | 7  | Server-to-Client |
- * | GAME_END     | 8  | Server-to-Client |
- * | CHAT_MESSAGE | 10 | Bi-Directional   |
- * +--------------+----+------------------+
+ * +--------------------+----+------------------+
+ * | Message Type       | ID | DIRECTION        |
+ * |--------------------+----+------------------+
+ * | WELCOME            | 0  | Server-to-Client |
+ * | LOGIN              | 1  | Bi-Directional   |
+ * | PLAYERS_LIST       | 9  | Server-to-Client |
+ * | TABLES_LIST        | 12 | Server-to-Client |
+ * | SIT_DOWN           | 13 | Bi-Directional   |
+ * | GATHERING          | 2  | Server-to-Client |
+ * | TABLE_PLAYERS_LIST | 9  | Server-to-Client |
+ * | PLAYER_READY       | 11 | Client-to-Server |
+ * | NEW_PLAYER         | 3  | Server-to-Client |
+ * | GAME_START         | 4  | Server-to-Client |
+ * | CARDS              | 5  | Server-to-Client |
+ * | PUT_CARD           | 6  | Bi-Directional   |
+ * | PLAYER_WON         | 7  | Server-to-Client |
+ * | GAME_END           | 8  | Server-to-Client |
+ * | CHAT_MESSAGE       | 10 | Bi-Directional   |
+ * +--------------------+----+------------------+
  */
 class FattyServerProtocol implements FattyComponentInterface
 {
     const MSG_WELCOME = 0;
     const MSG_LOGIN = 1;
-    const MSG_TABLES_LIST = 12;
-    const MSG_GATHERING = 2;
     const MSG_PLAYERS_LIST = 9;
+    const MSG_TABLES_LIST = 12;
+    const MSG_SIT_DOWN = 13;
+    const MSG_GATHERING = 2;
+    const MSG_TABLE_PLAYERS_LIST = 14;
     const MSG_PLAYER_READY = 11;
     const MSG_NEW_PLAYER = 3;
     const MSG_GAME_START = 4;
