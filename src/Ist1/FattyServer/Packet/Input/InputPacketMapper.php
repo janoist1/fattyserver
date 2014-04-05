@@ -29,6 +29,10 @@ class InputPacketMapper {
                 return new Login($array[self::DATA_KEY]);
                 break;
 
+            case FattyServerProtocol::MSG_SIT_DOWN:
+                return new SitDown($array[self::DATA_KEY]);
+                break;
+
             case FattyServerProtocol::MSG_PUT_CARD:
 
                 break;
