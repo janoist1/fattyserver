@@ -32,7 +32,6 @@ class LoginHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $connections = $serverProtocol->getServer()->getConnections();
         $player = $serverProtocol->getPlayerManager()->createAndAddPlayer(
             $fattyConnFrom, $this->packet->getName()
         );
@@ -42,12 +41,9 @@ class LoginHandler implements HandlerInterface
             new PlayerList($serverProtocol->getPlayerManager()->getPlayers())
         );
 
-        foreach ($connections as $conn) {
-            /** @var FattyConnection $fattyConnTo */
-            $fattyConnTo = $connections[$conn];
-            if ($fattyConnFrom !== $fattyConnTo) {
-                $fattyConnTo->sendPacket(new NewPlayer($player));
-            }
-        }
+        $serverProtocol->getPropagator()->sendPacketToPlayers(
+            new NewPlayer($player),
+            $fattyConnFrom
+        );
     }
 } 
