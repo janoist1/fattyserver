@@ -3,6 +3,8 @@
 namespace FattyServer\Table;
 
 
+use FattyServer\FattyConnection;
+
 class TableManager
 {
     /**
@@ -78,13 +80,31 @@ class TableManager
      * @param string $id
      * @return Table
      */
-    public function getTable($id)
+    public function getTableById($id)
     {
         if (!array_key_exists($id, $this->tables)) {
             return null;
         }
 
         return $this->tables[$id];
+    }
+
+    /**
+     * Returns a Table by a FattyConnection
+     *
+     * @param FattyConnection $conn
+     * @return Table
+     */
+    public function getTableByConnection(FattyConnection $conn)
+    {
+        /** @var Table $table */
+        foreach ($this->tables as $table) {
+            if ($table->getPlayers()->contains($conn)) {
+                return $table;
+            }
+        }
+
+        return null;
     }
 
     /**
