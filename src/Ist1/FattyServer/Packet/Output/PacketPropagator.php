@@ -9,7 +9,8 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 
-class PacketPropagator {
+class PacketPropagator
+{
 
     /**
      * @var PlayerManager
@@ -32,11 +33,13 @@ class PacketPropagator {
     }
 
     /**
-     * Propagates a packet to the players
+     * Propagates a Packet to all the Players
      *
      * @param AbstractOutputPacket $packet
      */
-    public function sendPacketToPlayers(AbstractOutputPacket $packet)
+    public function sendPacketToPlayers(
+        AbstractOutputPacket $packet,
+        FattyConnection $exclude = null)
     {
         $players = $this->playerManager->getPlayers();
 
@@ -45,7 +48,9 @@ class PacketPropagator {
             $player = $players[$conn];
             /** @var FattyConnection $fattyConn */
             $fattyConn = $player->getConnection();
-            $fattyConn->sendPacket($packet);
+            if ($fattyConn !== $exclude) {
+                $fattyConn->sendPacket($packet);
+            }
         }
     }
 
@@ -55,7 +60,10 @@ class PacketPropagator {
      * @param AbstractOutputPacket $packet
      * @param Table $table
      */
-    public function sendPacketToTable(AbstractOutputPacket $packet, Table $table)
+    public function sendPacketToTable(
+        AbstractOutputPacket $packet,
+        Table $table,
+        FattyConnection $exclude = null)
     {
         $players = $table->getPlayers();
 
@@ -64,7 +72,9 @@ class PacketPropagator {
             $player = $players[$conn];
             /** @var FattyConnection $fattyConn */
             $fattyConn = $player->getConnection();
-            $fattyConn->sendPacket($packet);
+            if ($fattyConn !== $exclude) {
+                $fattyConn->sendPacket($packet);
+            }
         }
     }
 } 
