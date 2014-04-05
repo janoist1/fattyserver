@@ -20,6 +20,8 @@ class TableManager
     public function __construct()
     {
         $this->tables = new \SplObjectStorage();
+
+        $this->createAndAddTable(self::DEFAULT_TABLE_NAME);
     }
 
     /**
