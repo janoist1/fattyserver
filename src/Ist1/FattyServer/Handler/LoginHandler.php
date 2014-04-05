@@ -7,7 +7,7 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\Login as LoginIn;
 use FattyServer\Packet\Output\Login as LoginOut;
 use FattyServer\Packet\Output\NewPlayer;
-use FattyServer\Packet\Output\PlayersList;
+use FattyServer\Packet\Output\PlayersList\PlayersList;
 use FattyServer\Packet\Output\TablesList;
 
 
