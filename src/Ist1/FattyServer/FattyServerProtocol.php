@@ -4,14 +4,7 @@ namespace FattyServer;
 
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
-use FattyServer\Packet\Output\ChatMessage;
-use FattyServer\Packet\Output\Login as LoginOut;
-use FattyServer\Packet\Output\NewPlayer;
-use FattyServer\Packet\Output\PlayersList;
-use FattyServer\Packet\Input\Login as LoginIn;
-use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;
-use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 use Ratchet\Wamp\JsonException;
 use Ratchet\ConnectionInterface;
