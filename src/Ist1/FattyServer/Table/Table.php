@@ -2,9 +2,12 @@
 
 namespace FattyServer\Table;
 
+use FattyServer\Player\Player;
+use FattyServer\Player\PlayerStorage;
 
-class Table {
 
+class Table extends PlayerStorage
+{
     /**
      * @var string
      */
@@ -16,18 +19,14 @@ class Table {
     protected $name;
 
     /**
-     * @var \SplObjectStorage
-     */
-    protected $players;
-
-    /**
      * @param $name
      */
     function __construct($name)
     {
+        parent::__construct();
+
         $this->id = uniqid();
         $this->name = $name;
-        $this->players = new \SplObjectStorage();
     }
 
     /**
