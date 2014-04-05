@@ -7,8 +7,10 @@ use FattyServer\FattyConnection;
 
 class TableManager
 {
+    const DEFAULT_TABLE_NAME = 'default';
+
     /**
-     * @var array
+     * @var \SplObjectStorage
      */
     protected $tables;
 
@@ -17,7 +19,7 @@ class TableManager
      */
     public function __construct()
     {
-        $this->tables = array();
+        $this->tables = new \SplObjectStorage();
     }
 
     /**
@@ -38,25 +40,25 @@ class TableManager
      */
     public function addTable(Table $table)
     {
-        if (array_key_exists($table->getId(), $this->tables)) {
-            return;
-        }
-
-        $this->tables[$table->getId()] = $table;
+        $this->tables->attach($table);
     }
 
     /**
-     * Removes a Table from the manager.
+     * Adds a Table to the manager.
      *
      * @param Table $table
      */
     public function removeTable(Table $table)
     {
-        if (!array_key_exists($table->getId(), $this->tables)) {
-            return;
-        }
+        $this->tables->offsetUnset($table);
+    }
 
-        unset($this->tables[$table->getId()]);
+    /**
+     * @return \SplObjectStorage
+     */
+    public function getTables()
+    {
+        return $this->tables;
     }
 
     /**
@@ -82,11 +84,14 @@ class TableManager
      */
     public function getTableById($id)
     {
-        if (!array_key_exists($id, $this->tables)) {
-            return null;
+        /** @var Table $table */
+        foreach ($this->tables as $table) {
+            if ($table->getId() == $id) {
+                return $table;
+            }
         }
 
-        return $this->tables[$id];
+        return null;
     }
 
     /**
@@ -105,13 +110,5 @@ class TableManager
         }
 
         return null;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTables()
-    {
-        return $this->tables;
     }
 } 
