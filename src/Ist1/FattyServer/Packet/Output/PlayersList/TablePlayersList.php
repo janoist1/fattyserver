@@ -16,6 +16,7 @@ class TablePlayersList extends AbstractPlayersList
     {
         return array(
             'id' => $player->getId(),
+            'is_ready' => $player->isReady(),
         );
     }
 
