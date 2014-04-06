@@ -24,6 +24,8 @@ use Ratchet\ConnectionInterface;
  * | GATHERING          | 2  | Server-to-Client |
  * | TABLE_PLAYERS_LIST | 9  | Server-to-Client |
  * | PLAYER_READY       | 11 | Client-to-Server |
+ * | SWAP               | 15 | Client-to-Server |
+ * | SWAP_DONE          | 16 | Server-to-Client |
  * | NEW_PLAYER         | 3  | Server-to-Client |
  * | GAME_START         | 4  | Server-to-Client |
  * | CARDS              | 5  | Server-to-Client |
@@ -43,6 +45,8 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_GATHERING = 2;
     const MSG_TABLE_PLAYERS_LIST = 14;
     const MSG_PLAYER_READY = 11;
+    const MSG_SWAP = 15;
+    const MSG_SWAP_DONE = 16;
     const MSG_NEW_PLAYER = 3;
     const MSG_GAME_START = 4;
     const MSG_CARDS = 5;
