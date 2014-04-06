@@ -9,14 +9,14 @@ use FattyServer\Player\Player;
 class PlayersList extends AbstractPlayersList
 {
     /**
-     * @param Player $table
+     * @param Player $player
      * @return array
      */
-    public function getItemData($table)
+    public function getItemData($player)
     {
         return array(
-            'id' => $table->getId(),
-            'name' => $table->getName(),
+            'id' => $player->getId(),
+            'name' => $player->getName(),
         );
     }
 
