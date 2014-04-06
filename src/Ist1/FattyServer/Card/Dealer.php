@@ -6,18 +6,23 @@ use FattyServer\Player\Player;
 use FattyServer\Table\Table;
 
 
-class Dealer extends CardStorage
+class Dealer
 {
     const RULE_CARDS_HAND = 3;
     const RULE_CARDS_UP = 3;
     const RULE_CARDS_DOWN = 3;
 
     /**
+     * @var CardStorage
+     */
+    protected $cards;
+
+    /**
      * Construct
      */
     function __construct()
     {
-        parent::__construct(self::generateCards());
+        $this->cards = new CardStorage(self::generateCards());
     }
 
     /**
@@ -36,6 +41,27 @@ class Dealer extends CardStorage
             $player->getCardsUp()->addCards($this->randomPick(self::RULE_CARDS_UP));
             $player->getCardsHand()->addCards($this->randomPick(self::RULE_CARDS_UP));
         }
+    }
+
+    /**
+     * Picks out N Card randomly and returns them
+     * Returns null if there are no more cards left
+     *
+     * @param int $num
+     * @return array|Card
+     */
+    public function randomPick($num = 1)
+    {
+        $randomCards = array();
+        $cards = $this->cards->getCards();
+
+        for ($i = 1; $i <= $num && $this->cards->count(); $i++) {
+            $card = $cards[array_rand($cards)];
+            $randomCards[] = $card;
+            $this->cards->removeCard($card);
+        }
+
+        return count($randomCards) > 1 ? $randomCards : array_shift($randomCards);
     }
 
     /**
