@@ -5,10 +5,9 @@ namespace FattyServer\Handler;
 use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\SitDown as SitDownIn;
+use FattyServer\Packet\Output\Gathering;
 use FattyServer\Packet\Output\PlayersList\TablePlayersList;
 use FattyServer\Packet\Output\SitDown as SitDownOut;
-use FattyServer\Table\Table;
-use FattyServer\Table\TableManager;
 
 
 class SitDownHandler implements HandlerInterface
@@ -39,6 +38,7 @@ class SitDownHandler implements HandlerInterface
 
         $table->addPlayer($player);
 
+        $fattyConnFrom->sendPacket(new Gathering($table));
         $fattyConnFrom->sendPacket(
             new TablePlayersList($table->getPlayers())
         );
