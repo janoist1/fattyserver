@@ -5,6 +5,7 @@ namespace FattyServer\Handler;
 use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\PlayerReady as PlayerReadyIn;
+use FattyServer\Packet\Output\GameStart;
 use FattyServer\Packet\Output\PlayerReady as PlayerReadyOut;
 
 
@@ -42,7 +43,14 @@ class PlayerReadyHandler implements HandlerInterface
         );
 
         if ($table->isReady()) {
-            // game shall start !
+            $table->getDealer()->dealForTable($table);
+
+            $players = $serverProtocol->getPlayerManager()->getPlayers();
+
+            /** @var FattyConnection $conn */
+            foreach ($players as $conn) {
+                $conn->sendPacket(new GameStart($players->offsetGet($conn), $table));
+            }
         }
     }
 } 
