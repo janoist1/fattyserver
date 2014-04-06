@@ -43,7 +43,7 @@ class PlayerReadyHandler implements HandlerInterface
         );
 
         if ($table->isReady()) {
-            $table->getDealer()->dealForTable($table);
+            $table->getDealer()->deal($table->getPlayers());
 
             $players = $serverProtocol->getPlayerManager()->getPlayers();
 

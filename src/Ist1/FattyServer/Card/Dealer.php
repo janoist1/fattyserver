@@ -30,10 +30,8 @@ class Dealer
      *
      * @param Table $table
      */
-    public function dealForTable(Table $table)
+    public function deal(\Iterator $players)
     {
-        $players = $table->getPlayers();
-
         foreach ($players as $conn) {
             /** @var Player $player */
             $player = $players[$conn];
