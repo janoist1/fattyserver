@@ -2,6 +2,7 @@
 
 namespace FattyServer\Table;
 
+use FattyServer\Card\Dealer;
 use FattyServer\Player\Player;
 use FattyServer\Player\PlayerStorage;
 
@@ -19,6 +20,11 @@ class Table extends PlayerStorage
     protected $name;
 
     /**
+     * @var Dealer
+     */
+    protected $dealer;
+
+    /**
      * @param $name
      */
     function __construct($name)
@@ -27,6 +33,7 @@ class Table extends PlayerStorage
 
         $this->id = uniqid();
         $this->name = $name;
+        $this->dealer = new Dealer();
     }
 
     /**
@@ -43,6 +50,14 @@ class Table extends PlayerStorage
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Dealer
+     */
+    public function getDealer()
+    {
+        return $this->dealer;
     }
 
     /**

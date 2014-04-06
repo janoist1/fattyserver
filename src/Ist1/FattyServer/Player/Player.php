@@ -2,6 +2,7 @@
 
 namespace FattyServer\Player;
 
+use FattyServer\Card\CardStorage;
 use FattyServer\FattyConnection;
 
 
@@ -22,12 +23,33 @@ class Player
      */
     protected $isReady;
 
+    /**
+     * @var CardStorage
+     */
+    protected $cardsHand;
 
+    /**
+     * @var CardStorage
+     */
+    protected $cardsUp;
+
+    /**
+     * @var CardStorage
+     */
+    protected $cardsDown;
+
+    /**
+     * @param FattyConnection $conn
+     * @param $name
+     */
     function __construct(FattyConnection $conn, $name)
     {
         $this->connection = $conn;
         $this->name = $name;
         $this->isReady = false;
+        $this->cardsHand = new CardStorage();
+        $this->cardsUp = new CardStorage();
+        $this->cardsDown = new CardStorage();
     }
 
     /**
@@ -70,4 +92,27 @@ class Player
         return $this->isReady;
     }
 
+    /**
+     * @return CardStorage
+     */
+    public function getCardsDown()
+    {
+        return $this->cardsDown;
+    }
+
+    /**
+     * @return CardStorage
+     */
+    public function getCardsHand()
+    {
+        return $this->cardsHand;
+    }
+
+    /**
+     * @return CardStorage
+     */
+    public function getCardsUp()
+    {
+        return $this->cardsUp;
+    }
 }
