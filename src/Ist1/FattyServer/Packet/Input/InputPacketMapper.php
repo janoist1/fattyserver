@@ -33,6 +33,10 @@ class InputPacketMapper {
                 return new SitDown($array[self::DATA_KEY]);
                 break;
 
+            case FattyServerProtocol::MSG_PLAYER_READY:
+                return new PlayerReady();
+                break;
+
             case FattyServerProtocol::MSG_PUT_CARD:
 
                 break;
