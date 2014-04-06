@@ -50,6 +50,10 @@ class Table extends PlayerStorage
      */
     public function isReady()
     {
+        if ($this->players->count() <= 1) {
+            return false;
+        }
+
         foreach ($this->players as $conn) {
             /** @var Player $player */
             $player = $this->players[$conn];
