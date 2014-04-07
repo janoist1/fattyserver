@@ -21,7 +21,7 @@ class CardStorage
     /**
      * @param Card $card
      */
-    public function addCard(Card $card)
+    public function add(Card $card)
     {
         $this->cards[$card->getId()] = $card;
     }
@@ -29,18 +29,18 @@ class CardStorage
     /**
      * @param array $cards
      */
-    public function addCards(array $cards)
+    public function addArray(array $cards)
     {
         /** @var Card $card */
         foreach ($cards as $card) {
-            $this->addCard($card);
+            $this->add($card);
         }
     }
 
     /**
      * @param Card $card
      */
-    public function removeCard(Card $card)
+    public function remove(Card $card)
     {
         unset($this->cards[$card->getId()]);
     }
@@ -48,9 +48,35 @@ class CardStorage
     /**
      * @param int $id
      */
-    public function removeCardById($id)
+    public function removeById($id)
     {
         unset($this->cards[$id]);
+    }
+
+    /**
+     * @param string $id
+     * @return bool
+     */
+    public function hasId($id)
+    {
+        return array_key_exists($id, $this->cards);
+    }
+
+    /**
+     * @param string $id
+     * @return Card
+     */
+    public function getById($id)
+    {
+        return $this->cards[$id];
+    }
+
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->cards;
     }
 
     /**
@@ -64,17 +90,8 @@ class CardStorage
     /**
      * @return array
      */
-    public function getCards()
-    {
-        return $this->cards;
-    }
-
-    /**
-     * @return array
-     */
     public function getIds()
     {
         return array_keys($this->cards);
-
     }
 } 
