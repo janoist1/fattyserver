@@ -54,6 +54,30 @@ class CardStorage
     }
 
     /**
+     * @param CardStorage $transferTo
+     */
+    public function transferAllTo(CardStorage $transferTo)
+    {
+        foreach ($this->cards as $card) {
+            $transferTo->add($card);
+            $this->remove($card);
+        }
+    }
+
+    /**
+     * @param array $ids
+     * @param CardStorage $transferTo
+     */
+    public function transferByIdsTo(array $ids, CardStorage $transferTo)
+    {
+        foreach ($ids as $id) {
+            $card = $this->getById($id);
+            $transferTo->add($card);
+            $this->remove($card);
+        }
+    }
+
+    /**
      * @param string $id
      * @return bool
      */

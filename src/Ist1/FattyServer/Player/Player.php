@@ -24,6 +24,11 @@ class Player
     protected $isReady;
 
     /**
+     * @var bool
+     */
+    protected $isSwapDone;
+
+    /**
      * @var CardStorage
      */
     protected $cardsHand;
@@ -47,9 +52,19 @@ class Player
         $this->connection = $conn;
         $this->name = $name;
         $this->isReady = false;
+        $this->isSwapDone = false;
         $this->cardsHand = new CardStorage();
         $this->cardsUp = new CardStorage();
         $this->cardsDown = new CardStorage();
+    }
+
+    /**
+     * @param $cardsUpIds
+     */
+    public function swapCards($cardsUpIds)
+    {
+        $this->getCardsUp()->transferAllTo($this->getCardsHand());
+        $this->getCardsHand()->transferByIdsTo($cardsUpIds, $this->getCardsUp());
     }
 
     /**
@@ -90,6 +105,22 @@ class Player
     public function isReady()
     {
         return $this->isReady;
+    }
+
+    /**
+     * @param boolean $isSwapDone
+     */
+    public function setSwapDone($isSwapDone)
+    {
+        $this->isSwapDone = $isSwapDone;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSwapDone()
+    {
+        return $this->isSwapDone;
     }
 
     /**
