@@ -8,30 +8,18 @@ use FattyServer\Player\Player;
 use FattyServer\Table\Table;
 
 
-class Swap extends AbstractOutputPacket
+class Swap extends AbstractPlayerOutputPacket
 {
-    /**
-     * @var Player
-     */
-    protected $player;
-
-    /**
-     * @param Player $player
-     * @param Table $table
-     */
-    function __construct(Player $player)
-    {
-        $this->player = $player;
-    }
-
     /**
      * @return array
      */
     public function getData()
     {
-        return array(
+        $data = array(
             'cards_up' => $this->player->getCardsUp()->getIds(),
         );
+
+        return array_merge(parent::getData(), $data);
     }
 
     /**
