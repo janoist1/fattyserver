@@ -29,6 +29,7 @@ class PlayerReadyHandler implements HandlerInterface
      * Propagates it to all other Players in the same Table.
      *
      * @param FattyConnection $fattyConnFrom
+     * @param FattyServerProtocol $serverProtocol
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
