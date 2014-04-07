@@ -54,6 +54,26 @@ class CardStorage
     }
 
     /**
+     * Picks out N Card randomly and returns them
+     * Returns null if there are no more cards left
+     *
+     * @param int $num
+     * @return array|Card
+     */
+    public function randomPick($num = 1)
+    {
+        $randomCards = array();
+
+        for ($i = 1; $i <= $num && $this->count(); $i++) {
+            $id = array_rand($this->getAll());
+            $randomCards[] = $this->getById($id);
+            $this->removeById($id);
+        }
+
+        return count($randomCards) > 1 ? $randomCards : array_shift($randomCards);
+    }
+
+    /**
      * @param CardStorage $transferTo
      */
     public function transferAllTo(CardStorage $transferTo)

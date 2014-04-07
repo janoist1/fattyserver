@@ -35,30 +35,10 @@ class Dealer
         foreach ($players as $conn) {
             /** @var Player $player */
             $player = $players[$conn];
-            $player->getCardsDown()->addArray($this->randomPick(self::RULE_CARDS_DOWN));
-            $player->getCardsUp()->addArray($this->randomPick(self::RULE_CARDS_UP));
-            $player->getCardsHand()->addArray($this->randomPick(self::RULE_CARDS_UP));
+            $player->getCardsDown()->addArray($this->cards->randomPick(self::RULE_CARDS_DOWN));
+            $player->getCardsUp()->addArray($this->cards->randomPick(self::RULE_CARDS_UP));
+            $player->getCardsHand()->addArray($this->cards->randomPick(self::RULE_CARDS_UP));
         }
-    }
-
-    /**
-     * Picks out N Card randomly and returns them
-     * Returns null if there are no more cards left
-     *
-     * @param int $num
-     * @return array|Card
-     */
-    public function randomPick($num = 1)
-    {
-        $randomCards = array();
-
-        for ($i = 1; $i <= $num && $this->cards->count(); $i++) {
-            $id = array_rand($this->cards->getAll());
-            $randomCards[] = $this->cards->getById($id);
-            $this->cards->removeById($id);
-        }
-
-        return count($randomCards) > 1 ? $randomCards : array_shift($randomCards);
     }
 
     /**
