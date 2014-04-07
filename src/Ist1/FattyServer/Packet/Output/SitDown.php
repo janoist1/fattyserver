@@ -7,13 +7,8 @@ use FattyServer\Player\Player;
 use FattyServer\Table\Table;
 
 
-class SitDown extends AbstractOutputPacket
+class SitDown extends AbstractPlayerOutputPacket
 {
-    /**
-     * @var Player
-     */
-    protected $player;
-
     /**
      * @var Table
      */
@@ -24,7 +19,7 @@ class SitDown extends AbstractOutputPacket
      */
     function __construct(Player $player, Table $table)
     {
-        $this->player = $player;
+        parent::__construct($player);
         $this->table = $table;
     }
 
@@ -33,10 +28,11 @@ class SitDown extends AbstractOutputPacket
      */
     public function getData()
     {
-        return array(
-            'user_id' => $this->player->getId(),
+        $data = array(
             'table_id' => $this->table->getId()
         );
+
+        return array_merge(parent::getData(), $data);
     }
 
     /**

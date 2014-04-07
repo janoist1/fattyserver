@@ -6,30 +6,18 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class NewPlayer extends AbstractOutputPacket
+class NewPlayer extends AbstractPlayerOutputPacket
 {
-    /**
-     * @var Player
-     */
-    protected $player;
-
-    /**
-     * @param Player $player
-     */
-    function __construct(Player $player)
-    {
-        $this->player = $player;
-    }
-
     /**
      * @return array
      */
     public function getData()
     {
-        return array(
-            'id' => $this->player->getId(),
+        $data = array(
             'name' => $this->player->getName()
         );
+
+        return array_merge(parent::getData(), $data);
     }
 
     /**

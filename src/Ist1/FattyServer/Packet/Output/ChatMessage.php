@@ -6,13 +6,8 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class ChatMessage extends AbstractOutputPacket
+class ChatMessage extends AbstractPlayerOutputPacket
 {
-    /**
-     * @var Player
-     */
-    protected $player;
-
     /**
      * @var string
      */
@@ -28,7 +23,7 @@ class ChatMessage extends AbstractOutputPacket
      */
     function __construct(Player $player, $text)
     {
-        $this->player = $player;
+        parent::__construct($player);
         $this->text = $text;
         $this->timestamp = time();
     }
@@ -39,12 +34,11 @@ class ChatMessage extends AbstractOutputPacket
     public function getData()
     {
         $data = array(
-            'player_id' => $this->player->getId(),
             'text' => $this->text,
             'timestamp' => $this->timestamp
         );
 
-        return $data;
+        return array_merge(parent::getData(), $data);
     }
 
     /**
