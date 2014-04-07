@@ -42,7 +42,7 @@ class InputPacketMapper {
                 break;
 
             case FattyServerProtocol::MSG_PUT_CARD:
-
+                return new PutCard($array[self::DATA_KEY]);
                 break;
 
             case FattyServerProtocol::MSG_CHAT_MESSAGE:

@@ -54,6 +54,16 @@ class CardStorage
     }
 
     /**
+     * @param array $ids
+     */
+    public function removeByIds($ids)
+    {
+        foreach ($ids as $id) {
+            $this->removeById($id);
+        }
+    }
+
+    /**
      * Picks out N Card randomly and returns them
      * Returns null if there are no more cards left
      *
