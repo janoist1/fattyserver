@@ -7,7 +7,7 @@ use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
-use FattyServer\Packet\Output\NewPlayer;
+use FattyServer\Packet\Output\SwapDone;
 
 
 class SwapHandler implements HandlerInterface
@@ -44,5 +44,13 @@ class SwapHandler implements HandlerInterface
             $table,
             $fattyConnFrom
         );
+
+        if ($table->isSwapDone()) {
+            $player = $table->getStartingPlayer();
+            $serverProtocol->getPropagator()->sendPacketToTable(
+                new SwapDone($player),
+                $table
+            );
+        }
     }
 } 

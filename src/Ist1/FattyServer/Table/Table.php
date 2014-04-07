@@ -79,4 +79,37 @@ class Table extends PlayerStorage
 
         return true;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSwapDone()
+    {
+        foreach ($this->players as $conn) {
+            /** @var Player $player */
+            $player = $this->players[$conn];
+            if (!$player->isSwapDone()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the starting Player.
+     * According to the rules this function
+     * meant to return the Player that has
+     * the lowest value card, but for now
+     * temporary returns the first one.
+     *
+     * @return Player
+     */
+    public function getStartingPlayer()
+    {
+        $this->players->rewind();
+
+        $conn = $this->players->current();
+        return $this->players->offsetGet($conn);
+    }
 } 
