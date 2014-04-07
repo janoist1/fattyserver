@@ -15,7 +15,7 @@ class TablePlayersList extends AbstractPlayersList
     public function getItemData($player)
     {
         return array(
-            'id' => $player->getId(),
+            'player_id' => $player->getId(),
             'is_ready' => $player->isReady(),
         );
     }
