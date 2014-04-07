@@ -11,6 +11,11 @@ class Dealer
     const RULE_CARDS_HAND = 3;
     const RULE_CARDS_UP = 3;
     const RULE_CARDS_DOWN = 3;
+    const RULE_2_VALUE = 2;
+    const RULE_8_VALUE = 8;
+    const RULE_9_VALUE = 9;
+    const RULE_10_VALUE = 10;
+    const RULE_ACE_VALUE = 1;
 
     /**
      * @var CardStorage
