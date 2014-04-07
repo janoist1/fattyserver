@@ -51,12 +51,11 @@ class Dealer
     public function randomPick($num = 1)
     {
         $randomCards = array();
-        $cards = $this->cards->getCards();
 
         for ($i = 1; $i <= $num && $this->cards->count(); $i++) {
-            $card = $cards[array_rand($cards)];
-            $randomCards[] = $card;
-            $this->cards->removeCard($card);
+            $id = array_rand($this->cards->getCards());
+            $randomCards[] = $this->cards->getCardById($id);
+            $this->cards->removeCardById($id);
         }
 
         return count($randomCards) > 1 ? $randomCards : array_shift($randomCards);
