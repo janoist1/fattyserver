@@ -61,7 +61,7 @@ class Player
     /**
      * @param $cardsUpIds
      */
-    public function swapCards($cardsUpIds)
+    public function swapCards(array $cardsUpIds)
     {
         $this->getCardsUp()->transferAllTo($this->getCardsHand());
         $this->getCardsHand()->transferByIdsTo($cardsUpIds, $this->getCardsUp());
