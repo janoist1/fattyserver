@@ -29,6 +29,7 @@ use Ratchet\ConnectionInterface;
  * | SWAP               | 15 | Bi-Directional   |
  * | SWAP_DONE          | 16 | Server-to-Client |
  * | PUT_CARD           | 6  | Bi-Directional   |
+ * | TURN               | 17 | Server-to-Client |
  * | PLAYER_WON         | 7  | Server-to-Client |
  * | GAME_END           | 8  | Server-to-Client |
  * | CHAT_MESSAGE       | 10 | Bi-Directional   |
@@ -49,6 +50,7 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_SWAP = 15;
     const MSG_SWAP_DONE = 16;
     const MSG_PUT_CARD = 6;
+    const MSG_TURN = 17;
     const MSG_PLAYER_WON = 7;
     const MSG_GAME_END = 8;
     const MSG_CHAT_MESSAGE = 10;
