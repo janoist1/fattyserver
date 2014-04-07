@@ -20,15 +20,14 @@ use Ratchet\ConnectionInterface;
  * | LOGIN              | 1  | Bi-Directional   |
  * | PLAYERS_LIST       | 9  | Server-to-Client |
  * | TABLES_LIST        | 12 | Server-to-Client |
+ * | NEW_PLAYER         | 3  | Server-to-Client |
  * | SIT_DOWN           | 13 | Bi-Directional   |
  * | GATHERING          | 2  | Server-to-Client |
  * | TABLE_PLAYERS_LIST | 9  | Server-to-Client |
- * | PLAYER_READY       | 11 | Client-to-Server |
- * | SWAP               | 15 | Client-to-Server |
- * | SWAP_DONE          | 16 | Server-to-Client |
- * | NEW_PLAYER         | 3  | Server-to-Client |
+ * | PLAYER_READY       | 11 | Bi-Directional   |
  * | GAME_START         | 4  | Server-to-Client |
- * | CARDS              | 5  | Server-to-Client |
+ * | SWAP               | 15 | Bi-Directional   |
+ * | SWAP_DONE          | 16 | Server-to-Client |
  * | PUT_CARD           | 6  | Bi-Directional   |
  * | PLAYER_WON         | 7  | Server-to-Client |
  * | GAME_END           | 8  | Server-to-Client |
@@ -41,15 +40,14 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_LOGIN = 1;
     const MSG_PLAYERS_LIST = 9;
     const MSG_TABLES_LIST = 12;
+    const MSG_NEW_PLAYER = 3;
     const MSG_SIT_DOWN = 13;
     const MSG_GATHERING = 2;
     const MSG_TABLE_PLAYERS_LIST = 14;
     const MSG_PLAYER_READY = 11;
+    const MSG_GAME_START = 4;
     const MSG_SWAP = 15;
     const MSG_SWAP_DONE = 16;
-    const MSG_NEW_PLAYER = 3;
-    const MSG_GAME_START = 4;
-    const MSG_CARDS = 5;
     const MSG_PUT_CARD = 6;
     const MSG_PLAYER_WON = 7;
     const MSG_GAME_END = 8;
