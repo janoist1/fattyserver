@@ -63,8 +63,9 @@ class CardStorage
     public function randomPick($num = 1)
     {
         $randomCards = array();
+        $cardsCount = $this->count();
 
-        for ($i = 1; $i <= $num && $this->count(); $i++) {
+        for ($i = 1; $i <= $num && $cardsCount--; $i++) {
             $id = array_rand($this->getAll());
             $randomCards[] = $this->getById($id);
             $this->removeById($id);
