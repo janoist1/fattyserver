@@ -64,6 +64,14 @@ class CardStorage
     }
 
     /**
+     *
+     */
+    public function removeAll()
+    {
+        $this->cards = array();
+    }
+
+    /**
      * Picks out N Card randomly and returns them
      * Returns null if there are no more cards left
      *
@@ -106,6 +114,38 @@ class CardStorage
             $transferTo->add($card);
             $this->remove($card);
         }
+    }
+
+    /**
+     * @return Card
+     */
+    public function getLastCard()
+    {
+        if (count($this->cards) < 1) {
+            return null;
+        }
+
+        return $this->cards[count($this->cards) - 1];
+    }
+
+    /**
+     * @return int
+     */
+    public function countLastValue()
+    {
+        if (count($this->cards) < 1) {
+            return 0;
+        }
+
+        $count = 1;
+        $value = end($this->cards)->getValue();
+
+        /** @var Card $card */
+        while ($card = prev($this->cards) && $card->getValue() == $value) {
+            $count++;
+        };
+
+        return $count;
     }
 
     /**
