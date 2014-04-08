@@ -47,6 +47,53 @@ class Dealer
     }
 
     /**
+     * @param $value
+     * @param $lastValue
+     * @return bool
+     */
+    public static function checkPass($value, $lastValue)
+    {
+        switch ($value) {
+            case Dealer::RULE_2_VALUE:
+            case Dealer::RULE_8_VALUE:
+            case Dealer::RULE_10_VALUE:
+            case Dealer::RULE_ACE_VALUE:
+                return $lastValue != Dealer::RULE_9_VALUE;
+                break;
+
+            default:
+                return $value >= $lastValue;
+        }
+    }
+
+    /**
+     * @param CardStorage $cardStorage
+     * @param $lastValue
+     * @return bool
+     */
+    public static function checkCardsPass(CardStorage $cardStorage, $lastValue)
+    {
+        /** @var Card $card */
+        foreach ($cardStorage->getAll() as $card) {
+            if (self::checkPass($card->getValue(), $lastValue)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $value
+     * @param CardStorage $cards
+     * @return bool
+     */
+    public static function checkBurn($value, CardStorage $cards)
+    {
+        return $value == self::RULE_10_VALUE || $cards->countLastValue() == self::RULE_BURN_COUNT;
+    }
+
+    /**
      * Returns an ordered array of cards
      *
      * @return array
