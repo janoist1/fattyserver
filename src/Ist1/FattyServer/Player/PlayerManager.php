@@ -42,4 +42,20 @@ class PlayerManager extends PlayerStorage
 
         return $player;
     }
+
+    /**
+     * @param $id
+     */
+    public function getPlayerById($id)
+    {
+        foreach ($this->players as $conn) {
+            /** @var Player $player */
+            $player = $this->players->offsetGet($conn);
+            if ($player->getId() == $id) {
+                return $player;
+            }
+        }
+
+        return null;
+    }
 } 
