@@ -85,7 +85,7 @@ class CardStorage
 
         for ($i = 1; $i <= $num && $cardsCount--; $i++) {
             $id = array_rand($this->getAll());
-            $randomCards[] = $this->getById($id);
+            $randomCards[$id] = $this->getById($id);
             $this->removeById($id);
         }
 
