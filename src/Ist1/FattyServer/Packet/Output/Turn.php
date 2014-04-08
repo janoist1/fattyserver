@@ -6,7 +6,7 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Player\Player;
 
 
-class PutCard extends AbstractPlayerOutputPacket
+class Turn extends AbstractPlayerOutputPacket
 {
     /**
      * @var array

@@ -2,10 +2,10 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\PutCardHandler;
+use FattyServer\Handler\TurnHandler;
 
 
-class PutCard implements InputPacketInterface
+class Turn implements InputPacketInterface
 {
     /**
      * @var string
@@ -29,10 +29,10 @@ class PutCard implements InputPacketInterface
     function __construct(array $data = null)
     {
         if (!is_array($data)) {
-            throw new \Exception('Invalid PutCard packet');
+            throw new \Exception('Invalid Turn packet');
         }
         if (!array_key_exists('card', $data)) {
-            throw new \Exception('PutCard card missing');
+            throw new \Exception('Turn card missing');
         }
 
         $this->card = $data['card'];

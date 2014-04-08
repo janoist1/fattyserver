@@ -9,23 +9,23 @@ use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 
 
-class PutCardHandler implements HandlerInterface
+class TurnHandler implements HandlerInterface
 {
     /**
-     * @var Input\PutCard
+     * @var Input\Turn
      */
     protected $packet;
 
     /**
-     * @param Input\PutCard $packet
+     * @param Input\Turn $packet
      */
-    function __construct(Input\PutCard $packet)
+    function __construct(Input\Turn $packet)
     {
         $this->packet = $packet;
     }
 
     /**
-     * Handles PutCard card request.
+     * Handles Turn card request.
      *
      * @param FattyConnection $fattyConnFrom
      * @param FattyServerProtocol $serverProtocol
@@ -35,6 +35,7 @@ class PutCardHandler implements HandlerInterface
         $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
 
+        $burn = false;
         $cardsHandCount = $player->getCardsHand()->count();
 
         if ($cardsHandCount || $player->getCardsUp()->count()) {
@@ -44,34 +45,26 @@ class PutCardHandler implements HandlerInterface
 
             $player->getCardsHand()->removeByIds($cardIds);
 
+            if (count($cardIds) == Dealer::RULE_BURN_NUM) {
+                $burn = count($cardIds) == Dealer::RULE_BURN_NUM;
+            }
+
         } else {
             $card = $player->getCardsDown()->randomPick(1);
             $cardIds = array($card->getId());
             $cardValue = $card->getValue();
         }
 
-        switch ($cardValue) {
-            case Dealer::RULE_2_VALUE:
-                break;
-
-            case Dealer::RULE_8_VALUE:
-                break;
-
-            case Dealer::RULE_9_VALUE:
-                break;
-
-            case Dealer::RULE_10_VALUE:
-                break;
-
-            case Dealer::RULE_ACE_VALUE:
-                break;
-
-            default:
-                break;
+        if (!$burn) {
+            $table->getDealer()->turn($cardValue);
         }
 
         $serverProtocol->getPropagator()->sendPacketToTable(
             new Output\PutCard($player, $cardIds),
+            $table
+        );
+        $serverProtocol->getPropagator()->sendPacketToTable(
+            new Output\Tu($player, $cardIds),
             $table
         );
     }

@@ -41,8 +41,8 @@ class InputPacketMapper {
                 return new Swap($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_PUT_CARD:
-                return new PutCard($array[self::DATA_KEY]);
+            case FattyServerProtocol::MSG_TURN:
+                return new Turn($array[self::DATA_KEY]);
                 break;
 
             case FattyServerProtocol::MSG_CHAT_MESSAGE:
