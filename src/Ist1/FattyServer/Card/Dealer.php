@@ -135,4 +135,12 @@ class Dealer
 
         return count($cards) > 1 ? $cards : array_shift($cards);
     }
+
+    /**
+     * @return CardStorage
+     */
+    public function getCards()
+    {
+        return $this->cards;
+    }
 } 
