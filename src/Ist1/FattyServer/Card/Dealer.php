@@ -16,6 +16,7 @@ class Dealer
     const RULE_9_VALUE = 9;
     const RULE_10_VALUE = 10;
     const RULE_ACE_VALUE = 1;
+    const RULE_BURN_COUNT = 4;
 
     /**
      * @var CardStorage
