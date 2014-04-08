@@ -76,7 +76,7 @@ class CardStorage
      * Returns null if there are no more cards left
      *
      * @param int $num
-     * @return array|Card
+     * @return array
      */
     public function randomPick($num = 1)
     {
@@ -89,7 +89,7 @@ class CardStorage
             $this->removeById($id);
         }
 
-        return count($randomCards) > 1 ? $randomCards : array_shift($randomCards);
+        return $randomCards;
     }
 
     /**
