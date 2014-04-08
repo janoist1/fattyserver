@@ -11,17 +11,31 @@ class Turn extends AbstractPlayerOutputPacket
     /**
      * @var array
      */
-    protected $cards;
+    protected $cardsPut;
+
+    /**
+     * @var array
+     */
+    protected $cardsPick;
+
+    /**
+     * @var bool
+     */
+    protected $burn;
 
     /**
      * @param Player $player
-     * @param array $cards
+     * @param array $cardsPut
+     * @param array $cardsPick
+     * @param bool $burn
      */
-    function __construct(Player $player, array $cards)
+    function __construct(Player $player, array $cardsPut, array $cardsPick, $burn)
     {
         parent::__construct($player);
 
-        $this->cards = $cards;
+        $this->cardsPut = $cardsPut;
+        $this->cardsPick = $cardsPick;
+        $this->burn = $burn;
     }
 
     /**
@@ -30,7 +44,9 @@ class Turn extends AbstractPlayerOutputPacket
     public function getData()
     {
         $data = array(
-            'cards' => $this->cards,
+            'cards_put' => $this->cardsPut,
+            'cards_pick' => $this->cardsPick,
+            'burn' => $this->burn,
         );
 
         return array_merge(parent::getData(), $data);
@@ -41,6 +57,6 @@ class Turn extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PUT_CARD;
+        return FattyServerProtocol::MSG_TURN;
     }
 } 

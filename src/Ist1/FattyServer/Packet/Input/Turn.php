@@ -8,14 +8,9 @@ use FattyServer\Handler\TurnHandler;
 class Turn implements InputPacketInterface
 {
     /**
-     * @var string
-     */
-    protected $card;
-
-    /**
      * @var array
      */
-    protected $variants;
+    protected $cards;
 
     /**
      * @var string
@@ -31,14 +26,12 @@ class Turn implements InputPacketInterface
         if (!is_array($data)) {
             throw new \Exception('Invalid Turn packet');
         }
-        if (!array_key_exists('card', $data)) {
-            throw new \Exception('Turn card missing');
+        if (!array_key_exists('cards', $data)) {
+            throw new \Exception('Turn cards missing');
         }
 
-        $this->card = $data['card'];
-        if (array_key_exists('variants', $data)) {
-            $this->variants = $data['variants'];
-        }
+        $this->cards = $data['cards'];
+
         if (array_key_exists('player_id', $data)) {
             $this->player_id = $data['player_id'];
         }
@@ -47,17 +40,9 @@ class Turn implements InputPacketInterface
     /**
      * @return array
      */
-    public function getCard()
+    public function getCards()
     {
-        return $this->card;
-    }
-
-    /**
-     * @return array
-     */
-    public function getVariants()
-    {
-        return $this->variants;
+        return $this->cards;
     }
 
     /**
@@ -69,21 +54,10 @@ class Turn implements InputPacketInterface
     }
 
     /**
-     * @return array
-     */
-    public function getCards()
-    {
-        return array_merge(
-            array($this->card),
-            is_array($this->variants) ? $this->variants : array()
-        );
-    }
-
-    /**
-     * @return PutCardHandler
+     * @return TurnHandler
      */
     public function getHandler()
     {
-        return new PutCardHandler($this);
+        return new TurnHandler($this);
     }
 } 
