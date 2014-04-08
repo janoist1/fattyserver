@@ -2,6 +2,7 @@
 
 namespace FattyServer\Handler;
 
+use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
 use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
@@ -34,38 +35,73 @@ class TurnHandler implements HandlerInterface
     {
         $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
+        $nextPlayer = $player;
 
-        $burn = false;
+        $cardsPickIds = array();
         $cardsHandCount = $player->getCardsHand()->count();
 
         if ($cardsHandCount || $player->getCardsUp()->count()) {
-            $cardIds = $this->packet->getCards();
+            // player has cards in hand or upside-up on the table
+            $cardsPutIds = $this->packet->getCards();
             $cardStorage = $cardsHandCount ? $player->getCardsHand() : $player->getCardsUp();
-            $cardValue = $cardStorage->getById($cardIds[0])->getValue();
+            $cardValue = $cardStorage->getById($cardsPutIds[0])->getValue();
 
-            $player->getCardsHand()->removeByIds($cardIds);
+            if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) { // todo: implement the 8 rule
+                // card passed, player picks from the deck if there are any
+                $cardStorage->transferByIdsTo($cardsPutIds, $table->getCards());
 
-            if (count($cardIds) == Dealer::RULE_BURN_NUM) {
-                $burn = count($cardIds) == Dealer::RULE_BURN_NUM;
+                if ($table->getDealer()->getCards()->count()) {
+                    $cardsPick = $table->getDealer()->getCards()
+                        ->randomPick(max(Dealer::RULE_CARDS_HAND - $player->getCardsHand()->count(), 0));
+                    $cardsPickIds = array_keys($cardsPick);
+
+                    $player->getCardsHand()->addArray($cardsPick);
+                }
+            } else {
+                // card did not pass, player has to pick all the cards from the table, but not here ... todo
             }
-
         } else {
-            $card = $player->getCardsDown()->randomPick(1);
-            $cardIds = array($card->getId());
+            // if the player has cards only upside down on the table (3 random cards)
+            $card = reset($player->getCardsDown()->randomPick(1));
+            $cardsPutIds = array($card->getId());
             $cardValue = $card->getValue();
+
+            if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) {
+                $table->getCards()->add($card);
+            } else {
+                $player->getCardsHand()->add($card);
+                $cardsPickIds = array($card->getId());
+            }
         }
 
-        if (!$burn) {
-            $table->getDealer()->turn($cardValue);
+        $burn = Dealer::checkBurn($cardValue, $table->getCards());
+
+        if ($burn) {
+            $table->getCards()->removeAll();
+        } elseif ($cardValue == Dealer::RULE_ACE_VALUE) {
+            $nextPlayer = $serverProtocol->getPlayerManager()->getPlayerById($this->packet->getPlayerId());
+        } else {
+            $nextPlayer = $table->turn()->getCurrentPlayer();
         }
 
         $serverProtocol->getPropagator()->sendPacketToTable(
-            new Output\PutCard($player, $cardIds),
+            new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, $burn),
             $table
         );
-        $serverProtocol->getPropagator()->sendPacketToTable(
-            new Output\Tu($player, $cardIds),
-            $table
-        );
+
+        // if the next Player is unable to put a valid card, has to pick up all
+        $cardStorage = $nextPlayer->getCardsHand()->count()
+            ? $nextPlayer->getCardsHand()
+            : $nextPlayer->getCardsUp();
+
+        if (!Dealer::checkCardsPass($cardStorage, $cardValue)) {
+            $cardsPickIds = $table->getCards()->getIds();
+            $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
+
+            $serverProtocol->getPropagator()->sendPacketToTable(
+                new Output\Turn($nextPlayer, null, $cardsPickIds, false),
+                $table
+            );
+        }
     }
 } 
