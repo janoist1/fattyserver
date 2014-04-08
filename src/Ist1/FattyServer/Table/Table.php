@@ -2,6 +2,8 @@
 
 namespace FattyServer\Table;
 
+use FattyServer\Card\Card;
+use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
 use FattyServer\Player\Player;
 use FattyServer\Player\PlayerStorage;
@@ -25,6 +27,16 @@ class Table extends PlayerStorage
     protected $dealer;
 
     /**
+     * @var CardStorage
+     */
+    protected $cards;
+
+    /**
+     * @var Player
+     */
+    protected $currentPlayer;
+
+    /**
      * @param $name
      */
     function __construct($name)
@@ -34,6 +46,7 @@ class Table extends PlayerStorage
         $this->id = uniqid();
         $this->name = $name;
         $this->dealer = new Dealer();
+        $this->cards = new CardStorage();
     }
 
     /**
@@ -58,6 +71,22 @@ class Table extends PlayerStorage
     public function getDealer()
     {
         return $this->dealer;
+    }
+
+    /**
+     * @param Player $currentPlayer
+     */
+    public function setCurrentPlayer($currentPlayer)
+    {
+        $this->currentPlayer = $currentPlayer;
+    }
+
+    /**
+     * @return Player
+     */
+    public function getCurrentPlayer()
+    {
+        return $this->currentPlayer;
     }
 
     /**
@@ -111,5 +140,34 @@ class Table extends PlayerStorage
 
         $conn = $this->players->current();
         return $this->players->offsetGet($conn);
+    }
+
+    /**
+     * @return $this
+     */
+    public function turn()
+    {
+        foreach ($this->players as $conn) {
+            /** @var Player $player */
+            $player = $this->players[$conn];
+            if ($player == $this->currentPlayer) {
+                $this->players->next();
+                if (!$this->players->valid()) {
+                    $this->players->rewind();
+                }
+                $this->currentPlayer = $this->players
+                    ->offsetGet($this->players->current());
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return CardStorage
+     */
+    public function getCards()
+    {
+        return $this->cards;
     }
 } 
