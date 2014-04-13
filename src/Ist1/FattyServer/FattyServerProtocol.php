@@ -23,7 +23,6 @@ use Ratchet\ConnectionInterface;
  * | NEW_PLAYER         | 3  | Server-to-Client |
  * | SIT_DOWN           | 13 | Bi-Directional   |
  * | GATHERING          | 2  | Server-to-Client |
- * | TABLE_PLAYERS_LIST | 9  | Server-to-Client |
  * | PLAYER_READY       | 11 | Bi-Directional   |
  * | GAME_START         | 4  | Server-to-Client |
  * | SWAP               | 15 | Bi-Directional   |
@@ -44,7 +43,6 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_NEW_PLAYER = 3;
     const MSG_SIT_DOWN = 13;
     const MSG_GATHERING = 2;
-    const MSG_TABLE_PLAYERS_LIST = 14;
     const MSG_PLAYER_READY = 11;
     const MSG_GAME_START = 4;
     const MSG_SWAP = 15;

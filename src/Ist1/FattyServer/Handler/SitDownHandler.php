@@ -6,7 +6,6 @@ use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\SitDown as SitDownIn;
 use FattyServer\Packet\Output\Gathering;
-use FattyServer\Packet\Output\PlayersList\TablePlayersList;
 use FattyServer\Packet\Output\SitDown as SitDownOut;
 
 
@@ -39,9 +38,7 @@ class SitDownHandler implements HandlerInterface
         $table->getPlayers()->add($player);
 
         $fattyConnFrom->sendPacket(new Gathering($table));
-        $fattyConnFrom->sendPacket(
-            new TablePlayersList($table->getPlayers()->getAll())
-        );
+
         $serverProtocol->getPropagator()->sendPacketToPlayers(
             new SitDownOut($player, $table),
             $fattyConnFrom
