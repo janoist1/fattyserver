@@ -14,7 +14,7 @@ class Gathering extends AbstractOutputPacket
     protected $table;
 
     /**
-     * @param $id
+     * @param Table $table
      */
     function __construct(Table $table)
     {
