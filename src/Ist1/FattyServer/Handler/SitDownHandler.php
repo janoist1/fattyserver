@@ -40,8 +40,7 @@ class SitDownHandler implements HandlerInterface
         $fattyConnFrom->sendPacket(new Gathering($table));
 
         $serverProtocol->getPropagator()->sendPacketToPlayers(
-            new SitDownOut($player, $table),
-            $fattyConnFrom
+            new SitDownOut($player, $table)
         );
     }
 } 

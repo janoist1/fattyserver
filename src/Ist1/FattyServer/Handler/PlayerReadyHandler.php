@@ -38,9 +38,8 @@ class PlayerReadyHandler implements HandlerInterface
 
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
 
-        $serverProtocol->getPropagator()->sendPacketToTable(
-            new PlayerReadyOut($player),
-            $table
+        $serverProtocol->getPropagator()->sendPacketToPlayers(
+            new PlayerReadyOut($player)
         );
 
         if ($table->isReady()) {
