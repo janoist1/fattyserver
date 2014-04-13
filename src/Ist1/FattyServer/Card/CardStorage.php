@@ -121,11 +121,21 @@ class CardStorage
      */
     public function getLastCard()
     {
-        if (count($this->cards) < 1) {
+        return end($this->cards);
+    }
+
+    /**
+     * @return Card
+     */
+    public function getCardAt($index)
+    {
+        if ($index >= $this->count()) {
             return null;
         }
 
-        return $this->cards[count($this->cards) - 1];
+        $ids = array_keys($this->cards);
+
+        return $this->cards[$ids[$index]];
     }
 
     /**
