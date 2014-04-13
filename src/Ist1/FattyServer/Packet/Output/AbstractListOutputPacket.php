@@ -9,14 +9,14 @@ use FattyServer\Table\Table;
 abstract class AbstractListOutputPacket extends AbstractOutputPacket
 {
     /**
-     * @var \SplObjectStorage
+     * @var \Iterator
      */
     protected $items;
 
     /**
-     * @param \SplObjectStorage $items
+     * @param \Iterator $items
      */
-    function __construct(\SplObjectStorage $items)
+    function __construct(\Iterator $items)
     {
         $this->items = $items;
     }
