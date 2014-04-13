@@ -7,6 +7,7 @@ use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input\PlayerReady as PlayerReadyIn;
 use FattyServer\Packet\Output\GameStart;
 use FattyServer\Packet\Output\PlayerReady as PlayerReadyOut;
+use FattyServer\Packet\Output\TableReady;
 
 
 class PlayerReadyHandler implements HandlerInterface
@@ -48,9 +49,11 @@ class PlayerReadyHandler implements HandlerInterface
         );
 
         if ($table->isReady()) {
-            $table->getDealer()->deal($table->getPlayers()->getAll());
+            $serverProtocol->getPropagator()->sendPacketToPlayers(new TableReady($table));
 
-            $players = $serverProtocol->getPlayerManager()->getPlayers()->getAll();
+            $players = $table->getPlayers()->getAll();
+
+            $table->getDealer()->deal($players);
 
             /** @var FattyConnection $conn */
             foreach ($players as $conn) {
