@@ -7,7 +7,6 @@ use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 use Ratchet\Wamp\JsonException;
-use Ratchet\ConnectionInterface;
 
 
 /**
@@ -88,7 +87,7 @@ class FattyServerProtocol implements FattyComponentInterface
     /**
      * {@inheritdoc}
      */
-    public function onOpen(ConnectionInterface $conn)
+    public function onOpen(FattyConnection $conn)
     {
         echo "Connection {$conn->resourceId} has connected\n";
     }
@@ -113,15 +112,18 @@ class FattyServerProtocol implements FattyComponentInterface
     /**
      * {@inheritdoc}
      */
-    public function onClose(ConnectionInterface $conn)
+    public function onClose(FattyConnection $fattyConn)
     {
-        echo "Connection {$conn->resourceId} has disconnected\n";
+        $handler = new PlayerLeftHandler();
+        $handler->handle($fattyConn, $this);
+
+        echo "Connection {$fattyConn->resourceId} has disconnected\n";
     }
 
     /**
      * {@inheritdoc}
      */
-    public function onError(ConnectionInterface $conn, \Exception $e)
+    public function onError(FattyConnection $conn, \Exception $e)
     {
         //return $this->_decorating->onError($this->connections[$conn], $e);
         echo "An error has occurred: {$e->getMessage()}\n";

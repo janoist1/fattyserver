@@ -35,8 +35,9 @@ class FattyServer implements MessageComponentInterface
      */
     public function onOpen(ConnectionInterface $conn)
     {
-        $this->connections->attach($conn, new FattyConnection($conn));
-        $this->fattyProtocol->onOpen($conn);
+        $fattyConn = new FattyConnection($conn);
+        $this->connections->attach($conn, $fattyConn);
+        $this->fattyProtocol->onOpen($fattyConn);
     }
 
     /**
@@ -46,7 +47,7 @@ class FattyServer implements MessageComponentInterface
     {
         try {
             /** @var FattyConnection $fattyConn */
-            $fattyConn = $this->connections[$conn];
+            $fattyConn = $this->connections->offsetGet($conn);
             $this->fattyProtocol->onMessage($fattyConn, $msg);
         } catch (JsonException $je) {
             $conn->close(1007);
@@ -60,8 +61,10 @@ class FattyServer implements MessageComponentInterface
      */
     public function onClose(ConnectionInterface $conn)
     {
+        /** @var FattyConnection $fattyConn */
+        $fattyConn = $this->connections->offsetGet($conn);
+        $this->fattyProtocol->onClose($fattyConn);
         $this->connections->detach($conn);
-        $this->fattyProtocol->onClose($conn);
     }
 
     /**
@@ -69,7 +72,9 @@ class FattyServer implements MessageComponentInterface
      */
     public function onError(ConnectionInterface $conn, \Exception $e)
     {
-        $this->fattyProtocol->onError($conn, $e);
+        /** @var FattyConnection $fattyConn */
+        $fattyConn = $this->connections->offsetGet($conn);
+        $this->fattyProtocol->onError($fattyConn, $e);
     }
 
     /**
@@ -78,13 +83,5 @@ class FattyServer implements MessageComponentInterface
     public function getConnections()
     {
         return $this->connections;
-    }
-
-    /**
-     * @return PlayerManager
-     */
-    public function getPlayerManager()
-    {
-        return $this->playerManager;
     }
 }
