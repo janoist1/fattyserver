@@ -23,6 +23,16 @@ class Table
     protected $name;
 
     /**
+     * @var bool
+     */
+    protected $isReady;
+
+    /**
+     * @var bool
+     */
+    protected $isSwapDone;
+
+    /**
      * @var Dealer
      */
     protected $dealer;
@@ -59,6 +69,8 @@ class Table
     {
         $this->id = uniqid();
         $this->name = $name;
+        $this->isReady = false;
+        $this->isSwapDone = false;
         $this->dealer = new Dealer();
         $this->players = new PlayerStorage();
         $this->cards = new CardStorage();
@@ -109,6 +121,10 @@ class Table
      */
     public function isReady()
     {
+        if ($this->isReady) {
+            return true;
+        }
+
         if ($this->players->getAll()->count() <= 1) {
             return false;
         }
@@ -121,7 +137,7 @@ class Table
             }
         }
 
-        return true;
+        return $this->isReady = true;
     }
 
     /**
@@ -129,6 +145,10 @@ class Table
      */
     public function isSwapDone()
     {
+        if ($this->isSwapDone) {
+            return true;
+        }
+
         foreach ($this->players->getAll() as $conn) {
             /** @var Player $player */
             $player = $this->players->getOne($conn);
@@ -137,7 +157,7 @@ class Table
             }
         }
 
-        return true;
+        return $this->isSwapDone = true;
     }
 
     /**
