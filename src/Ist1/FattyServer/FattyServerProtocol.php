@@ -2,6 +2,7 @@
 
 namespace FattyServer;
 
+use FattyServer\Handler\PlayerLeftHandler;
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
