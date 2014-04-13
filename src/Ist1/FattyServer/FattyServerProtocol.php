@@ -31,6 +31,7 @@ use Ratchet\Wamp\JsonException;
  * | PLAYER_WON         | 7  | Server-to-Client |
  * | GAME_END           | 8  | Server-to-Client |
  * | CHAT_MESSAGE       | 10 | Bi-Directional   |
+ * | PLAYER_LEFT        | 14 | Bi-Directional   |
  * +--------------------+----+------------------+
  */
 class FattyServerProtocol implements FattyComponentInterface
@@ -51,6 +52,7 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_PLAYER_WON = 7;
     const MSG_GAME_END = 8;
     const MSG_CHAT_MESSAGE = 10;
+    const MSG_PLAYER_LEFT = 14;
 
 
     /**
