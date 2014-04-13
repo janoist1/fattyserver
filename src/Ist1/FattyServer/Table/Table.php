@@ -9,7 +9,7 @@ use FattyServer\Player\Player;
 use FattyServer\Player\PlayerStorage;
 
 
-class Table extends PlayerStorage
+class Table
 {
     /**
      * @var string
@@ -27,6 +27,11 @@ class Table extends PlayerStorage
     protected $dealer;
 
     /**
+     * @var PlayerStorage
+     */
+    protected $players;
+
+    /**
      * @var CardStorage
      */
     protected $cards;
@@ -41,11 +46,10 @@ class Table extends PlayerStorage
      */
     function __construct($name)
     {
-        parent::__construct();
-
         $this->id = uniqid();
         $this->name = $name;
         $this->dealer = new Dealer();
+        $this->players = new PlayerStorage();
         $this->cards = new CardStorage();
     }
 
@@ -94,13 +98,13 @@ class Table extends PlayerStorage
      */
     public function isReady()
     {
-        if ($this->players->count() <= 1) {
+        if ($this->players->getAll()->count() <= 1) {
             return false;
         }
 
-        foreach ($this->players as $conn) {
+        foreach ($this->players->getAll() as $conn) {
             /** @var Player $player */
-            $player = $this->players[$conn];
+            $player = $this->players->getOne($conn);
             if (!$player->isReady()) {
                 return false;
             }
@@ -114,9 +118,9 @@ class Table extends PlayerStorage
      */
     public function isSwapDone()
     {
-        foreach ($this->players as $conn) {
+        foreach ($this->players->getAll() as $conn) {
             /** @var Player $player */
-            $player = $this->players[$conn];
+            $player = $this->players->getOne($conn);
             if (!$player->isSwapDone()) {
                 return false;
             }
@@ -136,10 +140,7 @@ class Table extends PlayerStorage
      */
     public function getStartingPlayer()
     {
-        $this->players->rewind();
-
-        $conn = $this->players->current();
-        return $this->players->offsetGet($conn);
+        return $this->players->getFirst();
     }
 
     /**
@@ -147,18 +148,7 @@ class Table extends PlayerStorage
      */
     public function turn()
     {
-        foreach ($this->players as $conn) {
-            /** @var Player $player */
-            $player = $this->players[$conn];
-            if ($player == $this->currentPlayer) {
-                $this->players->next();
-                if (!$this->players->valid()) {
-                    $this->players->rewind();
-                }
-                $this->currentPlayer = $this->players
-                    ->offsetGet($this->players->current());
-            }
-        }
+        $this->currentPlayer = $this->players->getNext($this->currentPlayer);
 
         return $this;
     }
@@ -169,5 +159,13 @@ class Table extends PlayerStorage
     public function getCards()
     {
         return $this->cards;
+    }
+
+    /**
+     * @return PlayerStorage
+     */
+    public function getPlayers()
+    {
+        return $this->players;
     }
 } 

@@ -33,7 +33,7 @@ class TurnHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
         $nextPlayer = $player;
 
@@ -79,7 +79,7 @@ class TurnHandler implements HandlerInterface
         if ($burn) {
             $table->getCards()->removeAll();
         } elseif ($cardValue == Dealer::RULE_ACE_VALUE) {
-            $nextPlayer = $serverProtocol->getPlayerManager()->getPlayerById($this->packet->getPlayerId());
+            $nextPlayer = $table->getPlayers()->getById($this->packet->getPlayerId());
         } else {
             $nextPlayer = $table->turn()->getCurrentPlayer();
         }

@@ -106,7 +106,7 @@ class TableManager
     {
         /** @var Table $table */
         foreach ($this->tables as $table) {
-            if ($table->getPlayers()->contains($conn)) {
+            if ($table->getPlayers()->getAll()->contains($conn)) {
                 return $table;
             }
         }

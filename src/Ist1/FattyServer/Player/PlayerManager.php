@@ -5,14 +5,19 @@ namespace FattyServer\Player;
 use FattyServer\FattyConnection;
 
 
-class PlayerManager extends PlayerStorage
+class PlayerManager
 {
+    /**
+     * @var PlayerStorage
+     */
+    protected $players;
+
     /**
      * Construct.
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->players = new PlayerStorage();
     }
 
     /**
@@ -38,24 +43,16 @@ class PlayerManager extends PlayerStorage
     public function createAndAddPlayer(FattyConnection $conn, $name)
     {
         $player = self::createPlayer($conn, $name);
-        $this->addPlayer($player);
+        $this->players->add($player);
 
         return $player;
     }
 
     /**
-     * @param $id
+     * @return PlayerStorage
      */
-    public function getPlayerById($id)
+    public function getPlayers()
     {
-        foreach ($this->players as $conn) {
-            /** @var Player $player */
-            $player = $this->players->offsetGet($conn);
-            if ($player->getId() == $id) {
-                return $player;
-            }
-        }
-
-        return null;
+        return $this->players;
     }
 } 

@@ -33,7 +33,7 @@ class SwapHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
 
         $player->swapCards($this->packet->getCardsUp());

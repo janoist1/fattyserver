@@ -25,7 +25,7 @@ class PlayerStorage
      *
      * @param Player $player
      */
-    public function addPlayer(Player $player)
+    public function add(Player $player)
     {
         $this->players->attach($player->getConnection(), $player);
     }
@@ -35,7 +35,7 @@ class PlayerStorage
      *
      * @param Player $player
      */
-    public function removePlayer(Player $player)
+    public function remove(Player $player)
     {
         $this->players->offsetUnset($player->getConnection());
     }
@@ -46,16 +46,78 @@ class PlayerStorage
      * @param FattyConnection $conn
      * @return Player
      */
-    public function getPlayer(FattyConnection $conn)
+    public function getOne(FattyConnection $conn)
     {
         return $this->players->offsetGet($conn);
     }
 
     /**
+     * Returns a Player based on its ID
+     *
+     * @param string $id
+     * @return Player
+     */
+    public function getById($id)
+    {
+        foreach ($this->players as $conn) {
+            /** @var Player $player */
+            $player = $this->getOne($conn);
+            if ($player->getId() == $id) {
+                return $player;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @return \SplObjectStorage
      */
-    public function getPlayers()
+    public function getAll()
     {
         return $this->players;
+    }
+
+    /**
+     * @return Player
+     */
+    public function getFirst()
+    {
+        $this->players->rewind();
+
+        return $this->getOne($this->players->current());
+    }
+
+    /**
+     * @param Player $currentPlayer
+     * @return Player
+     */
+    public function getNext(Player $currentPlayer)
+    {
+        foreach ($this->players as $conn) {
+            if ($conn == $currentPlayer->getConnection()) {
+                $this->players->next();
+                if (!$this->players->valid()) {
+                    $this->players->rewind();
+                }
+                return $this->getOne($this->players->current());
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIds()
+    {
+        $ids = array();
+
+        foreach ($this->players as $conn) {
+            $ids[] = $this->getOne($conn)->getId();
+        }
+
+        return $ids;
     }
 } 

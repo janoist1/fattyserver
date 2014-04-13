@@ -42,7 +42,7 @@ class LoginHandler implements HandlerInterface
         $fattyConnFrom->sendPacket(new LoginOut());
         $fattyConnFrom->sendPacket(new TablesList($tables));
         $fattyConnFrom->sendPacket(
-            new PlayersList($serverProtocol->getPlayerManager()->getPlayers())
+            new PlayersList($serverProtocol->getPlayerManager()->getPlayers()->getAll())
         );
         $serverProtocol->getPropagator()->sendPacketToPlayers(
             new NewPlayer($player),

@@ -33,7 +33,7 @@ class PlayerReadyHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
         $player->setReady(true);
 
         $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
@@ -44,9 +44,9 @@ class PlayerReadyHandler implements HandlerInterface
         );
 
         if ($table->isReady()) {
-            $table->getDealer()->deal($table->getPlayers());
+            $table->getDealer()->deal($table->getPlayers()->getAll());
 
-            $players = $serverProtocol->getPlayerManager()->getPlayers();
+            $players = $serverProtocol->getPlayerManager()->getPlayers()->getAll();
 
             /** @var FattyConnection $conn */
             foreach ($players as $conn) {

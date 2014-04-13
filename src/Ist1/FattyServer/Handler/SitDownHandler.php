@@ -33,14 +33,14 @@ class SitDownHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableById($this->packet->getTableId());
 
-        $table->addPlayer($player);
+        $table->getPlayers()->add($player);
 
         $fattyConnFrom->sendPacket(new Gathering($table));
         $fattyConnFrom->sendPacket(
-            new TablePlayersList($table->getPlayers())
+            new TablePlayersList($table->getPlayers()->getAll())
         );
         $serverProtocol->getPropagator()->sendPacketToPlayers(
             new SitDownOut($player, $table),

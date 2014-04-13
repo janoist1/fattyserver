@@ -41,7 +41,7 @@ class PacketPropagator
         AbstractOutputPacket $packet,
         FattyConnection $exclude = null)
     {
-        $players = $this->playerManager->getPlayers();
+        $players = $this->playerManager->getPlayers()->getAll();
 
         foreach ($players as $conn) {
             /** @var Player $player */
@@ -65,7 +65,7 @@ class PacketPropagator
         Table $table,
         FattyConnection $exclude = null)
     {
-        $players = $table->getPlayers();
+        $players = $table->getPlayers()->getAll();
 
         foreach ($players as $conn) {
             /** @var Player $player */

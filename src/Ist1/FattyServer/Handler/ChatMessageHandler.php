@@ -31,7 +31,7 @@ class ChatMessageHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayer($fattyConnFrom);
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
 
         $serverProtocol->getPropagator()->sendPacketToPlayers(
             new ChatMessageOut($player, $this->packet->getMessage())

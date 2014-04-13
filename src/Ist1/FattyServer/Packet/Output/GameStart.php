@@ -36,7 +36,7 @@ class GameStart extends AbstractOutputPacket
     public function getData()
     {
         $cards = array();
-        $players = $this->table->getPlayers();
+        $players = $this->table->getPlayers()->getAll();
 
         foreach ($players as $conn) {
             /** @var Player $player */
