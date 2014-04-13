@@ -5,6 +5,7 @@ namespace FattyServer\Table;
 use FattyServer\Card\Card;
 use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
+use FattyServer\Exception\GameOverException;
 use FattyServer\Player\Player;
 use FattyServer\Player\PlayerStorage;
 
@@ -30,6 +31,16 @@ class Table
      * @var PlayerStorage
      */
     protected $players;
+
+    /**
+     * @var PlayerStorage
+     */
+    protected $playersLeft;
+
+    /**
+     * @var PlayerStorage
+     */
+    protected $playersFinished;
 
     /**
      * @var CardStorage
@@ -145,9 +156,24 @@ class Table
 
     /**
      * @return $this
+     * @throws GameOverException
      */
     public function turn()
     {
+        $playersCount = $this->players->getAll()->count();
+        $playersLeftCount = $this->playersLeft->getAll()->count();
+
+        // add who finished and left
+        foreach ($this->playersFinished->getAll() as $conn) {
+            if ($this->isPlayerLeft($this->playersFinished->getOne($conn))) {
+                $playersCount++;
+            }
+        }
+
+        if ($playersCount < 2 || $playersCount - $playersLeftCount == 1) {
+            throw new GameOverException();
+        }
+
         $this->currentPlayer = $this->players->getNext($this->currentPlayer);
 
         return $this;
@@ -167,5 +193,70 @@ class Table
     public function getPlayers()
     {
         return $this->players;
+    }
+
+    /**
+     * @param Player $player
+     */
+    public function playerLeft(Player $player)
+    {
+        if ($this->isReady()) {
+            $this->playersLeft->add($player);
+        } else {
+            $this->players->remove($player);
+        }
+    }
+
+    /**
+     * @param Player $player
+     */
+    public function playerFinished(Player $player)
+    {
+        $this->playersFinished->add($player);
+        $this->players->remove($player);
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function hasPlayer(Player $player)
+    {
+        return $this->players->contains($player);
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function isPlayerLeft(Player $player)
+    {
+        return $this->playersLeft->contains($player);
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function isPlayerFinished(Player $player)
+    {
+        return $this->playersFinished->contains($player);
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function isPlayerActive(Player $player)
+    {
+        return $this->hasPlayer($player) && !$this->isPlayerLeft($player) && !$this->isPlayerFinished($player);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull()
+    {
+        return $this->players->getAll()->count() >= Dealer::RULE_MAX_PLAYERS;
     }
 } 

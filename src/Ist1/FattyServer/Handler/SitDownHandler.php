@@ -33,7 +33,31 @@ class SitDownHandler implements HandlerInterface
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
         $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
+        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
+
+        if ($table !== null) {
+            // todo: handle Player already sat to another Table
+            return;
+        }
+
         $table = $serverProtocol->getTableManager()->getTableById($this->packet->getTableId());
+
+        if ($table === null) {
+            // todo: handle Table not exists
+            return;
+        }
+        if ($table->isFull()) {
+            // todo: handle max Player limit reached, no more can sit
+            return;
+        }
+        if ($table->hasPlayer($player)) {
+            // todo: handle Player already sat to this Table
+            return;
+        }
+        if ($table->isReady()) {
+            // todo: handle Table is ready, no more Player can sit
+            return;
+        }
 
         $table->getPlayers()->add($player);
 

@@ -21,6 +21,11 @@ class Player
     /**
      * @var bool
      */
+    protected $isConnected;
+
+    /**
+     * @var bool
+     */
     protected $isReady;
 
     /**
@@ -49,6 +54,7 @@ class Player
      */
     function __construct(FattyConnection $conn, $name)
     {
+        $this->isConnected = true;
         $this->connection = $conn;
         $this->name = $name;
         $this->isReady = false;
@@ -89,6 +95,22 @@ class Player
     public function getId()
     {
         return $this->connection->getId();
+    }
+
+    /**
+     * @param boolean $isConnected
+     */
+    public function setConnected($isConnected)
+    {
+        $this->isConnected = $isConnected;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        return $this->isConnected;
     }
 
     /**

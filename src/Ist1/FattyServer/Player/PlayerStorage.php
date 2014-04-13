@@ -41,6 +41,16 @@ class PlayerStorage
     }
 
     /**
+     * Removes a Player by its FattyConnection
+     *
+     * @param FattyConnection $conn
+     */
+    public function removeByConnection(FattyConnection $conn)
+    {
+        $this->players->offsetUnset($conn);
+    }
+
+    /**
      * Returns a Player based on its FattyConnection
      *
      * @param FattyConnection $conn
@@ -48,7 +58,11 @@ class PlayerStorage
      */
     public function getOne(FattyConnection $conn)
     {
-        return $this->players->offsetGet($conn);
+        try {
+            return $this->players->offsetGet($conn);
+        } catch(\UnexpectedValueException $e) {
+            return null;
+        }
     }
 
     /**
@@ -119,5 +133,14 @@ class PlayerStorage
         }
 
         return $ids;
+    }
+
+    /**
+     * @param Player $player
+     * @return bool
+     */
+    public function contains(Player $player)
+    {
+        return $this->players->contains($player->getConnection());
     }
 } 

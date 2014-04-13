@@ -34,8 +34,18 @@ class SwapHandler implements HandlerInterface
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
         $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
-        $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
+        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
 
+        if (!$table->isPlayerActive($player)) {
+            // todo: handle Player is not playing at this Table
+            return;
+        }
+        if ($player->isSwapDone()) {
+            // todo: handle swap already done
+            return;
+        }
+
+        // todo: check if the Player has sent valid Cards
         $player->swapCards($this->packet->getCardsUp());
         $player->setSwapDone(true);
 
@@ -46,7 +56,9 @@ class SwapHandler implements HandlerInterface
         );
 
         if ($table->isSwapDone()) {
+            // todo: handle if the starting Player has left
             $player = $table->getStartingPlayer();
+
             $serverProtocol->getPropagator()->sendPacketToTable(
                 new SwapDone($player),
                 $table

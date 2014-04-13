@@ -43,13 +43,12 @@ class PacketPropagator
     {
         $players = $this->playerManager->getPlayers()->getAll();
 
+        /** @var FattyConnection $conn */
         foreach ($players as $conn) {
             /** @var Player $player */
-            $player = $players[$conn];
-            /** @var FattyConnection $fattyConn */
-            $fattyConn = $player->getConnection();
-            if ($fattyConn !== $exclude) {
-                $fattyConn->sendPacket($packet);
+            $player = $players->offsetGet($conn);
+            if ($player->isConnected() && $conn !== $exclude) {
+                $conn->sendPacket($packet);
             }
         }
     }
@@ -67,13 +66,12 @@ class PacketPropagator
     {
         $players = $table->getPlayers()->getAll();
 
+        /** @var FattyConnection $conn */
         foreach ($players as $conn) {
             /** @var Player $player */
-            $player = $players[$conn];
-            /** @var FattyConnection $fattyConn */
-            $fattyConn = $player->getConnection();
-            if ($fattyConn !== $exclude) {
-                $fattyConn->sendPacket($packet);
+            $player = $players->offsetGet($conn);
+            if ($player->isConnected() && $conn !== $exclude) {
+                $conn->sendPacket($packet);
             }
         }
     }

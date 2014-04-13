@@ -34,6 +34,13 @@ class LoginHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getById($fattyConnFrom->getId());
+
+        if ($player !== null) {
+            // todo: handle Player already logged in
+            return;
+        }
+
         $player = $serverProtocol->getPlayerManager()->createAndAddPlayer(
             $fattyConnFrom, $this->packet->getName()
         );

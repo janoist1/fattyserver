@@ -4,6 +4,7 @@ namespace FattyServer\Table;
 
 
 use FattyServer\FattyConnection;
+use FattyServer\Player\Player;
 
 class TableManager
 {
@@ -99,14 +100,14 @@ class TableManager
     /**
      * Returns a Table by a FattyConnection
      *
-     * @param FattyConnection $conn
+     * @param Player $player
      * @return Table
      */
-    public function getTableByConnection(FattyConnection $conn)
+    public function getTableByPlayer(Player $player)
     {
         /** @var Table $table */
         foreach ($this->tables as $table) {
-            if ($table->getPlayers()->getAll()->contains($conn)) {
+            if ($table->getPlayers()->getAll()->contains($player->getConnection())) {
                 return $table;
             }
         }

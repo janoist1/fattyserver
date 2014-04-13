@@ -4,6 +4,7 @@ namespace FattyServer\Handler;
 
 use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
+use FattyServer\Exception\GameOverException;
 use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Input;
@@ -33,23 +34,37 @@ class TurnHandler implements HandlerInterface
      */
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
-        $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
-        $nextPlayer = $player;
+        // todo: split this huge function
 
+        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
+        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
+
+        if (!$table->hasPlayer($player)) {
+            // todo: handle Player is not playing
+            return;
+        }
+        if ($table->getCurrentPlayer() != $player) {
+            // todo: handle wrong turn
+            return;
+        }
+
+        $cardsPutIds = array();
         $cardsPickIds = array();
         $cardsHandCount = $player->getCardsHand()->count();
 
         if ($cardsHandCount || $player->getCardsUp()->count()) {
-            // player has cards in hand or upside-up on the table
+            // player has cards in hand or face-up on the table
             $cardsPutIds = $this->packet->getCards();
             $cardStorage = $cardsHandCount ? $player->getCardsHand() : $player->getCardsUp();
             $cardValue = $cardStorage->getById($cardsPutIds[0])->getValue();
+
+            // todo: check if cards to put are in the storage
 
             if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) { // todo: implement the 8 rule
                 // card passed, player picks from the deck if there are any
                 $cardStorage->transferByIdsTo($cardsPutIds, $table->getCards());
 
+                // pick from the deck if there is any
                 if ($table->getDealer()->getCards()->count()) {
                     $cardsPick = $table->getDealer()->getCards()
                         ->randomPick(max(Dealer::RULE_CARDS_HAND - $player->getCardsHand()->count(), 0));
@@ -61,47 +76,151 @@ class TurnHandler implements HandlerInterface
                 // card did not pass, player has to pick all the cards from the table, but not here ... todo
             }
         } else {
-            // if the player has cards only upside down on the table (3 random cards)
+            // if the player has cards only face-down on the table (3 random cards)
             $card = reset($player->getCardsDown()->randomPick(1));
-            $cardsPutIds = array($card->getId());
             $cardValue = $card->getValue();
 
             if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) {
+                // the Player can put the randomly picket card
                 $table->getCards()->add($card);
+                $cardsPutIds = array($card->getId());
+
+                // todo: check if user has any cards left, unless win
             } else {
+                // the Player has to pick up the random card
                 $player->getCardsHand()->add($card);
                 $cardsPickIds = array($card->getId());
             }
         }
 
+        // let's get the next Player
+        $nextPlayer = null;
         $burn = Dealer::checkBurn($cardValue, $table->getCards());
 
         if ($burn) {
             $table->getCards()->removeAll();
+
+            if (!$table->isPlayerFinished($player)) {
+                // Player burned but hasn't finished playing
+                $nextPlayer = $player;
+            }
         } elseif ($cardValue == Dealer::RULE_ACE_VALUE) {
+            // Player has an Ace so can choose the next one
             $nextPlayer = $table->getPlayers()->getById($this->packet->getPlayerId());
-        } else {
-            $nextPlayer = $table->turn()->getCurrentPlayer();
+
+            if ($table->isPlayerFinished($nextPlayer)) {
+                // todo: handle player already finished, can't turn
+                return;
+            }
+        }
+        if ($nextPlayer === null) {
+            // nothing special, next Player in the row turns
+            try {
+                $nextPlayer = $table->turn()->getCurrentPlayer();
+            } catch(GameOverException $e) {
+                // todo: send game end
+            }
         }
 
-        $serverProtocol->getPropagator()->sendPacketToTable(
-            new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, $burn),
-            $table
+        // send Turn packet with next Player, put cards, newly picket cards to the current Player
+        $fattyConnFrom->sendPacket(
+            new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, $burn)
         );
 
-        // if the next Player is unable to put a valid card, has to pick up all
-        $cardStorage = $nextPlayer->getCardsHand()->count()
-            ? $nextPlayer->getCardsHand()
-            : $nextPlayer->getCardsUp();
+        // send Turn packet with next Player, put cards, newly picket dummy cards to all other Players
+        $serverProtocol->getPropagator()->sendPacketToTable(
+            new Output\Turn($nextPlayer, $cardsPutIds, array_keys(Dealer::generateDummy(count($cardsPickIds))), $burn),
+            $table,
+            $fattyConnFrom
+        );
 
-        if (!Dealer::checkCardsPass($cardStorage, $cardValue)) {
-            $cardsPickIds = $table->getCards()->getIds();
-            $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
+        // if the next Player is still playing
+        if (!$table->isPlayerLeft($nextPlayer)) {
+            $cardStorage = $nextPlayer->getCardsHand()->count()
+                ? $nextPlayer->getCardsHand()
+                : $nextPlayer->getCardsUp();
+
+            // if the next Player is unable to put a valid card, has to pick up all
+            if (!Dealer::checkCardsPass($cardStorage, $cardValue)) {
+                $cardsPickIds = $table->getCards()->getIds();
+                $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
+
+                try {
+                    $nextPlayer = $table->turn()->getCurrentPlayer();
+                } catch(GameOverException $e) {
+                    // todo: send game end
+                }
+
+                $serverProtocol->getPropagator()->sendPacketToTable(
+                    new Output\Turn($nextPlayer, null, $cardsPickIds, false),
+                    $table
+                );
+            }
+        }
+
+        // we put a card instead of the players who left
+        while (!$nextPlayer->isConnected()
+            || ($table->isPlayerLeft($nextPlayer)) && !$table->isPlayerFinished($nextPlayer)) {
+            // get the first available card set
+            switch (true) {
+                case $nextPlayer->getCardsHand()->count() > 0:
+                    $cardStorage = $nextPlayer->getCardsHand();
+                    break;
+
+                case $nextPlayer->getCardsUp()->count() > 0:
+                    $cardStorage = $nextPlayer->getCardsUp();
+                    break;
+
+                case $nextPlayer->getCardsDown()->count() > 0:
+                    $cardStorage = $nextPlayer->getCardsDown();
+                    break;
+
+                default:
+                    // player already won
+                    $cardStorage = null;
+                    break;
+            }
+
+            $cardsPutIds = array();
+            $cardsPickIds = array();
+            $cardIndex = 0;
+
+            // get the first available card
+            while (($card = $cardStorage->getCardAt($cardIndex++)) !== null
+                && Dealer::checkPass($card->getValue(), $table->getCards()->getLastCard()->getValue())) ;
+
+            if ($card != null) {
+                // there was valid card to put
+                $cardsPutIds = array($card->getId());
+                $cardStorage->transferByIdsTo($cardsPutIds, $table->getCards());
+
+                // pick from the deck if there is any
+                if ($table->getDealer()->getCards()->count()) {
+                    $cardsPick = $table->getDealer()->getCards()
+                        ->randomPick(max(Dealer::RULE_CARDS_HAND - $nextPlayer->getCardsHand()->count(), 0));
+                    $cardsPickIds = array_keys($cardsPick);
+
+                    $player->getCardsHand()->addArray($cardsPick);
+                }
+
+                // todo: check if user has any cards left, unless win
+            } else {
+                // there was no valid card to put, player has to pick up all
+                $cardsPickIds = $table->getCards()->getIds();
+                $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
+            }
+
+            try {
+                $nextPlayer = $table->turn()->getCurrentPlayer();
+            } catch(GameOverException $e) {
+                // todo: send game end
+            }
 
             $serverProtocol->getPropagator()->sendPacketToTable(
-                new Output\Turn($nextPlayer, null, $cardsPickIds, false),
-                $table
+                new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, false),
+                $table,
+                $nextPlayer->getConnection()
             );
         }
     }
-} 
+}

@@ -34,9 +34,14 @@ class PlayerReadyHandler implements HandlerInterface
     public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
     {
         $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
-        $player->setReady(true);
+        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
 
-        $table = $serverProtocol->getTableManager()->getTableByConnection($fattyConnFrom);
+        if ($player->isReady()) {
+            // todo: handle Player is already ready
+            return;
+        }
+
+        $player->setReady(true);
 
         $serverProtocol->getPropagator()->sendPacketToPlayers(
             new PlayerReadyOut($player)
