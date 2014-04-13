@@ -37,6 +37,10 @@ class InputPacketMapper {
                 return new PlayerReady();
                 break;
 
+            case FattyServerProtocol::MSG_PLAYER_LEFT_TABLE:
+                return new PlayerLeftTable();
+                break;
+
             case FattyServerProtocol::MSG_SWAP:
                 return new Swap($array[self::DATA_KEY]);
                 break;
