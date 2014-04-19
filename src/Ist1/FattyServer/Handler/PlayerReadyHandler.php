@@ -27,7 +27,7 @@ class PlayerReadyHandler implements HandlerInterface
 
     /**
      * Handles ReadyPlayer request.
-     * Propagates it to all other Players in the same Table.
+     * Propagates it to all other Players.
      *
      * @param FattyConnection $fattyConnFrom
      * @param FattyServerProtocol $serverProtocol
@@ -37,6 +37,10 @@ class PlayerReadyHandler implements HandlerInterface
         $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
         $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
 
+        if ($table == null) {
+            // todo: handle Player is not at this Table
+            return;
+        }
         if ($player->isReady()) {
             // todo: handle Player is already ready
             return;
@@ -50,8 +54,7 @@ class PlayerReadyHandler implements HandlerInterface
 
         if ($table->isReady()) {
             $serverProtocol->getPropagator()->sendPacketToPlayers(new TableReady($table));
-
-            $players = $table->getPlayers()->getAll();
+            $players = clone $table->getPlayers()->getAll();
 
             $table->getDealer()->deal($players);
 
