@@ -24,6 +24,7 @@ use Ratchet\Wamp\JsonException;
  * | SIT_DOWN           | 13 | Bi-Directional   |
  * | GATHERING          | 2  | Server-to-Client |
  * | PLAYER_READY       | 11 | Bi-Directional   |
+ * | PLAYER_NOT_READY   | 21 | Bi-Directional   |
  * | GAME_START         | 4  | Server-to-Client |
  * | SWAP               | 15 | Bi-Directional   |
  * | SWAP_DONE          | 16 | Server-to-Client |
@@ -48,6 +49,7 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_SIT_DOWN = 13;
     const MSG_GATHERING = 2;
     const MSG_PLAYER_READY = 11;
+    const MSG_PLAYER_NOT_READY = 21;
     const MSG_GAME_START = 4;
     const MSG_SWAP = 15;
     const MSG_SWAP_DONE = 16;

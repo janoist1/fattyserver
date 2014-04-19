@@ -37,6 +37,10 @@ class InputPacketMapper {
                 return new PlayerReady();
                 break;
 
+            case FattyServerProtocol::MSG_PLAYER_NOT_READY:
+                return new PlayerNotReady();
+                break;
+
             case FattyServerProtocol::MSG_PLAYER_LEFT_TABLE:
                 return new PlayerLeftTable();
                 break;
