@@ -2,7 +2,6 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\LoginHandler;
 use FattyServer\Handler\PlayerReadyHandler;
 
 
@@ -20,7 +19,7 @@ class PlayerReady implements InputPacketInterface {
     }
 
     /**
-     * @return LoginHandler
+     * @return PlayerReadyHandler
      */
     public function getHandler()
     {
