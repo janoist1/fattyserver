@@ -58,7 +58,7 @@ class InputPacketMapper {
                 break;
 
             default:
-                throw new \Exception('Invalid message type');
+                throw new \Exception('Invalid message type ('. $array[self::TYPE_KEY] .')');
         }
     }
 } 
