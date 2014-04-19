@@ -73,6 +73,8 @@ class Table
         $this->isSwapDone = false;
         $this->dealer = new Dealer();
         $this->players = new PlayerStorage();
+        $this->playersLeft = new PlayerStorage();
+        $this->playersFinished = new PlayerStorage();
         $this->cards = new CardStorage();
     }
 
