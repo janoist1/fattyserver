@@ -2,8 +2,9 @@
 
 namespace FattyServer\Exception;
 
+use FattyServer\Handler\HandleableInterface;
 
-abstract class AbstractGameException extends \Exception
+
+abstract class AbstractGameException extends \Exception implements HandleableInterface
 {
-    abstract public function getHandler();
 }
