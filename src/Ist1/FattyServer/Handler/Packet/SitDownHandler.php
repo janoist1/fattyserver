@@ -79,7 +79,7 @@ class SitDownHandler extends AbstractHandler
 
         $this->connection->sendPacket(new Gathering($table));
 
-        $this->propagator->sendPacketToPlayers(
+        $this->propagator->sendPacketToAll(
             new Output\SitDown($player, $table)
         );
     }

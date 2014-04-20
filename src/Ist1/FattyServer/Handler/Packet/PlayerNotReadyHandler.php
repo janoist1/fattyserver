@@ -32,6 +32,6 @@ class PlayerNotReadyHandler extends AbstractHandler
 
         $player->setReady(false);
 
-        $this->propagator->sendPacketToPlayers(new PlayerNotReady($player));
+        $this->propagator->sendPacketToAll(new PlayerNotReady($player));
     }
 } 

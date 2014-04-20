@@ -30,11 +30,11 @@ class PlayerReadyHandler extends AbstractHandler
         }
 
         $player->setReady(true);
-        $this->propagator->sendPacketToPlayers(new PlayerReady($player));
+        $this->propagator->sendPacketToAll(new PlayerReady($player));
 
 
         if ($table->isReady()) {
-            $this->propagator->sendPacketToPlayers(new TableReady($table));
+            $this->propagator->sendPacketToAll(new TableReady($table));
             $players = clone $table->getPlayers()->getAll();
 
             $table->getDealer()->deal($players);

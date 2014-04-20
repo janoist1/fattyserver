@@ -49,7 +49,7 @@ class ChatMessageHandler extends AbstractHandler
     {
         $player = $this->playerManager->getPlayers()->getOne($this->connection);
 
-        $this->propagator->sendPacketToPlayers(
+        $this->propagator->sendPacketToAll(
             new Output\ChatMessage($player, $this->packet->getMessage())
         );
     }
