@@ -9,7 +9,7 @@ use FattyServer\Packet\Output\PlayerReady;
 use FattyServer\Packet\Output\TableReady;
 
 
-class PlayerReadyHandler extends AbstractHandler
+class PlayerReadyHandler extends AbstractPacketHandler
 {
     /**
      * Handles ReadyPlayer request.

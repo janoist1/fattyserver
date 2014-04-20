@@ -12,7 +12,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class SwapHandler extends AbstractHandler
+class SwapHandler extends AbstractPacketHandler
 {
     /**
      * @var Input\Swap

@@ -12,7 +12,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class SitDownHandler extends AbstractHandler
+class SitDownHandler extends AbstractPacketHandler
 {
     /**
      * @var Input\SitDown

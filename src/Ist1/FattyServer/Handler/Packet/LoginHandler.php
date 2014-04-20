@@ -14,7 +14,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class LoginHandler extends AbstractHandler
+class LoginHandler extends AbstractPacketHandler
 {
     /**
      * @var Input\Login

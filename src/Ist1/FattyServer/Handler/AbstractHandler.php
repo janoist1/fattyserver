@@ -26,11 +26,6 @@ abstract class AbstractHandler
     protected $propagator;
 
     /**
-     * @var FattyConnection
-     */
-    protected $connection;
-
-    /**
      * @param PlayerManager $playerManager
      * @param TableManager $tableManager
      * @param PacketPropagator $propagator
@@ -39,13 +34,11 @@ abstract class AbstractHandler
     function __construct(
         PlayerManager $playerManager,
         TableManager $tableManager,
-        PacketPropagator $propagator,
-        FattyConnection $connection)
+        PacketPropagator $propagator)
     {
         $this->playerManager = $playerManager;
         $this->tableManager = $tableManager;
         $this->propagator = $propagator;
-        $this->connection = $connection;
     }
 
     abstract public function handle();

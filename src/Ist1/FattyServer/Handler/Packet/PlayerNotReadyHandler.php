@@ -6,7 +6,7 @@ use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Output\PlayerNotReady;
 
 
-class PlayerNotReadyHandler extends AbstractHandler
+class PlayerNotReadyHandler extends AbstractPacketHandler
 {
     /**
      * Handles ReadyNotPlayer request.
@@ -34,4 +34,4 @@ class PlayerNotReadyHandler extends AbstractHandler
 
         $this->propagator->sendPacketToAll(new PlayerNotReady($player));
     }
-} 
+}

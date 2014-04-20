@@ -14,7 +14,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class TurnHandler extends AbstractHandler
+class TurnHandler extends AbstractPacketHandler
 {
     /**
      * @var Input\Turn

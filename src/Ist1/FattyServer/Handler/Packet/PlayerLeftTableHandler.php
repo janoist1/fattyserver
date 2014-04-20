@@ -6,7 +6,7 @@ use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Output\PlayerLeftTable;
 
 
-class PlayerLeftTableHandler extends AbstractHandler
+class PlayerLeftTableHandler extends AbstractPacketHandler
 {
     /**
      * Removes a player from a table and let others know about it.

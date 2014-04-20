@@ -11,7 +11,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class ChatMessageHandler extends AbstractHandler
+class ChatMessageHandler extends AbstractPacketHandler
 {
     /**
      * @var Input\ChatMessage
