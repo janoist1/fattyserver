@@ -2,11 +2,17 @@
 
 namespace FattyServer\Packet\Input;
 
+use FattyServer\FattyConnection;
 use FattyServer\FattyServerProtocol;
-use FattyServer\Handler\ChatMessageHandler;
+use FattyServer\Handler\HandlerInterface;
+use FattyServer\Handler\Packet\ChatMessageHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
-class ChatMessage implements InputPacketInterface {
+class ChatMessage implements InputPacketInterface
+{
 
     /**
      * @var string
@@ -39,10 +45,20 @@ class ChatMessage implements InputPacketInterface {
     }
 
     /**
-     * @return ChatMessageHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new ChatMessageHandler($this);
+        return new ChatMessageHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection,
+            $this
+        );
     }
 } 

@@ -3,7 +3,11 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\Card\Dealer;
-use FattyServer\Handler\SwapHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\SwapHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class Swap implements InputPacketInterface
@@ -41,10 +45,20 @@ class Swap implements InputPacketInterface
     }
 
     /**
-     * @return SwapHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new SwapHandler($this);
+        return new SwapHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection,
+            $this
+        );
     }
 } 

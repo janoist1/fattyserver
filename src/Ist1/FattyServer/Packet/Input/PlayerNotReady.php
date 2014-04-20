@@ -2,7 +2,11 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\PlayerNotReadyHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\PlayerNotReadyHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class PlayerNotReady implements InputPacketInterface {
@@ -19,10 +23,19 @@ class PlayerNotReady implements InputPacketInterface {
     }
 
     /**
-     * @return PlayerNotReadyHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new PlayerNotReadyHandler($this);
+        return new PlayerNotReadyHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection
+        );
     }
 } 

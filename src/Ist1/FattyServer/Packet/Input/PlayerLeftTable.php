@@ -2,8 +2,11 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\LoginHandler;
-use FattyServer\Handler\PlayerReadyHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\PlayerLeftTableHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class PlayerLeftTable implements InputPacketInterface {
@@ -15,15 +18,24 @@ class PlayerLeftTable implements InputPacketInterface {
     function __construct(array $data = null)
     {
         if ($data !== null) {
-            throw new \Exception('Invalid PlayerReady packet');
+            throw new \Exception('Invalid PlayerLeftTable packet');
         }
     }
 
     /**
-     * @return LoginHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new PlayerReadyHandler($this);
+        return new PlayerLeftTableHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection
+        );
     }
 } 

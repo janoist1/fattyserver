@@ -2,6 +2,8 @@
 
 namespace FattyServer;
 
+use FattyServer\Exception\AbstractGameException;
+use FattyServer\Exception\GameOverException;
 use FattyServer\Handler\PlayerLeftHandler;
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -117,7 +119,17 @@ class FattyServerProtocol implements FattyComponentInterface
         }
 
         $packet = InputPacketMapper::map($json);
-        $packet->getHandler()->handle($fattyConnFrom, $this);
+
+        try {
+            $packet->getHandler(
+                $this->playerManager,
+                $this->tableManager,
+                $this->propagator,
+                $fattyConnFrom
+            )->handle();
+        } catch (AbstractGameException $exception) {
+
+        }
     }
 
     /**
@@ -125,7 +137,13 @@ class FattyServerProtocol implements FattyComponentInterface
      */
     public function onClose(FattyConnection $fattyConn)
     {
-        $handler = new PlayerLeftHandler();
+        $handler = new PlayerLeftHandler(
+            $this->playerManager,
+            $this->tableManager,
+            $this->propagator,
+            $fattyConn
+        );
+
         $handler->handle($fattyConn, $this);
 
         echo "Connection {$fattyConn->resourceId} has disconnected\n";

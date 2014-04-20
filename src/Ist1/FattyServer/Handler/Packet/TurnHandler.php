@@ -1,17 +1,20 @@
 <?php
 
-namespace FattyServer\Handler;
+namespace FattyServer\Handler\Packet;
 
 use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
 use FattyServer\Exception\GameOverException;
 use FattyServer\FattyConnection;
-use FattyServer\FattyServerProtocol;
+use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
-class TurnHandler implements HandlerInterface
+class TurnHandler extends AbstractHandler
 {
     /**
      * @var Input\Turn
@@ -19,25 +22,38 @@ class TurnHandler implements HandlerInterface
     protected $packet;
 
     /**
+     * @param PlayerManager $playerManager
+     * @param TableManager $tableManager
+     * @param PacketPropagator $propagator
+     * @param FattyConnection $connection
      * @param Input\Turn $packet
      */
-    function __construct(Input\Turn $packet)
+    function __construct(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection,
+        Input\Turn $packet)
     {
+        parent::__construct(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection
+        );
+
         $this->packet = $packet;
     }
 
     /**
      * Handles Turn card request.
-     *
-     * @param FattyConnection $fattyConnFrom
-     * @param FattyServerProtocol $serverProtocol
      */
-    public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
+    public function handle()
     {
         // todo: split this huge function
 
-        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
-        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
+        $player = $this->playerManager->getPlayers()->getOne($this->connection);
+        $table = $this->tableManager->getTableByPlayer($player);
 
         if (!$table->hasPlayer($player)) {
             // todo: handle Player is not playing
@@ -123,15 +139,15 @@ class TurnHandler implements HandlerInterface
         }
 
         // send Turn packet with next Player, put cards, newly picket cards to the current Player
-        $fattyConnFrom->sendPacket(
+        $this->connection->sendPacket(
             new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, $burn)
         );
 
         // send Turn packet with next Player, put cards, newly picket dummy cards to all other Players
-        $serverProtocol->getPropagator()->sendPacketToTable(
+        $this->propagator->sendPacketToTable(
             new Output\Turn($nextPlayer, $cardsPutIds, array_keys(Dealer::generateDummy(count($cardsPickIds))), $burn),
             $table,
-            $fattyConnFrom
+            $this->connection
         );
 
         // if the next Player is still playing
@@ -151,7 +167,7 @@ class TurnHandler implements HandlerInterface
                     // todo: send game end
                 }
 
-                $serverProtocol->getPropagator()->sendPacketToTable(
+                $this->propagator->sendPacketToTable(
                     new Output\Turn($nextPlayer, null, $cardsPickIds, false),
                     $table
                 );
@@ -216,7 +232,7 @@ class TurnHandler implements HandlerInterface
                 // todo: send game end
             }
 
-            $serverProtocol->getPropagator()->sendPacketToTable(
+            $this->propagator->sendPacketToTable(
                 new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, false),
                 $table,
                 $nextPlayer->getConnection()

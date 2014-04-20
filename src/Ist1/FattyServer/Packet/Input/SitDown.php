@@ -2,8 +2,11 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\LoginHandler;
-use FattyServer\Handler\SitDownHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\SitDownHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class SitDown implements InputPacketInterface {
@@ -39,10 +42,20 @@ class SitDown implements InputPacketInterface {
     }
 
     /**
-     * @return LoginHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new SitDownHandler($this);
+        return new SitDownHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection,
+            $this
+        );
     }
 } 

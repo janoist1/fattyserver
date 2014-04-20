@@ -2,7 +2,11 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\LoginHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\LoginHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class Login implements InputPacketInterface {
@@ -38,10 +42,20 @@ class Login implements InputPacketInterface {
     }
 
     /**
-     * @return LoginHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new LoginHandler($this);
+        return new LoginHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection,
+            $this
+        );
     }
 } 

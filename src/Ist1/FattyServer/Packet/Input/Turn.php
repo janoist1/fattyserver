@@ -2,7 +2,11 @@
 
 namespace FattyServer\Packet\Input;
 
-use FattyServer\Handler\TurnHandler;
+use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\TurnHandler;
+use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\PlayerManager;
+use FattyServer\Table\TableManager;
 
 
 class Turn implements InputPacketInterface
@@ -54,10 +58,20 @@ class Turn implements InputPacketInterface
     }
 
     /**
-     * @return TurnHandler
+     * {@inheritdoc}
      */
-    public function getHandler()
+    public function getHandler(
+        PlayerManager $playerManager,
+        TableManager $tableManager,
+        PacketPropagator $propagator,
+        FattyConnection $connection)
     {
-        return new TurnHandler($this);
+        return new TurnHandler(
+            $playerManager,
+            $tableManager,
+            $propagator,
+            $connection,
+            $this
+        );
     }
 } 

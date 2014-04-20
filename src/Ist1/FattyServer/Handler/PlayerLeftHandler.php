@@ -2,30 +2,25 @@
 
 namespace FattyServer\Handler;
 
-use FattyServer\FattyConnection;
-use FattyServer\FattyServerProtocol;
 use FattyServer\Packet\Output\PlayerLeft;
 
 
-class PlayerLeftHandler implements HandlerInterface
+class PlayerLeftHandler extends AbstractHandler
 {
     /**
      * Removes a player and let others know about it.
-     *
-     * @param FattyConnection $fattyConnFrom
-     * @param FattyServerProtocol $serverProtocol
      */
-    public function handle(FattyConnection $fattyConnFrom, FattyServerProtocol $serverProtocol)
+    public function handle()
     {
-        $player = $serverProtocol->getPlayerManager()->getPlayers()->getOne($fattyConnFrom);
-        $table = $serverProtocol->getTableManager()->getTableByPlayer($player);
+        $player = $this->playerManager->getPlayers()->getOne($this->connection);
+        $table = $this->tableManager->getTableByPlayer($player);
 
         $player->setConnected(false);
-        $serverProtocol->getPlayerManager()->getPlayers()->remove($player);
+        $this->playerManager->getPlayers()->remove($player);
 
-        $serverProtocol->getPropagator()->sendPacketToPlayers(new PlayerLeft($player));
+        $this->propagator->sendPacketToPlayers(new PlayerLeft($player));
 
-        if ($table != null) {
+        if ($table != null && !$table->isPlayerActive($player)) {
             $table->playerLeft($player);
 
             if ($player == $table->getCurrentPlayer()) {
