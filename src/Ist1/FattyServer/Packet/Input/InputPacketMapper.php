@@ -3,6 +3,7 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyServerProtocol;
+use FattyServer\Handler\Packet\PacketHandlerInterface;
 
 
 class InputPacketMapper {
@@ -12,7 +13,7 @@ class InputPacketMapper {
 
     /**
      * @param array $array
-     * @return InputPacketInterface
+     * @return PacketHandlerInterface
      * @throws \Exception
      */
     static public function map(array $array)
@@ -27,6 +28,10 @@ class InputPacketMapper {
         switch ($array[self::TYPE_KEY]) {
             case FattyServerProtocol::MSG_LOGIN:
                 return new Login($array[self::DATA_KEY]);
+                break;
+
+            case FattyServerProtocol::MSG_NEW_TABLE:
+                return new NewTable($array[self::DATA_KEY]);
                 break;
 
             case FattyServerProtocol::MSG_SIT_DOWN:

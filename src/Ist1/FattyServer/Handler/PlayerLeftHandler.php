@@ -2,10 +2,11 @@
 
 namespace FattyServer\Handler;
 
+use FattyServer\Handler\Packet\AbstractPacketHandler;
 use FattyServer\Packet\Output\PlayerLeft;
 
 
-class PlayerLeftHandler extends AbstractHandler
+class PlayerLeftHandler extends AbstractPacketHandler
 {
     /**
      * Removes a player and let others know about it.

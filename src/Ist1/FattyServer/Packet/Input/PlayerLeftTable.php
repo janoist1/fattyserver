@@ -3,13 +3,14 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
+use FattyServer\Handler\Packet\PacketHandlerInterface;
 use FattyServer\Handler\Packet\PlayerLeftTableHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class PlayerLeftTable implements InputPacketInterface {
+class PlayerLeftTable implements PacketHandlerInterface {
 
     /**
      * @param array $data

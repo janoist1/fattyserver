@@ -3,15 +3,14 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
-use FattyServer\FattyServerProtocol;
-use FattyServer\Handler\HandlerInterface;
 use FattyServer\Handler\Packet\ChatMessageHandler;
+use FattyServer\Handler\Packet\PacketHandlerInterface;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class ChatMessage implements InputPacketInterface
+class ChatMessage implements PacketHandlerInterface
 {
 
     /**

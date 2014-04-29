@@ -5,8 +5,8 @@ namespace FattyServer\Packet\Output;
 use FattyServer\FattyServerProtocol;
 
 
-class Login extends AbstractOutputPacket {
-
+class Login extends AbstractOutputPacket
+{
     /**
      * @var bool
      */

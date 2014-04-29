@@ -2,9 +2,13 @@
 
 namespace FattyServer\Handler;
 
+use FattyServer\Exception\TableAbandonedException;
 use FattyServer\FattyConnection;
+use FattyServer\Packet\Output\NewTable;
 use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;
+use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 
 
@@ -29,7 +33,6 @@ abstract class AbstractHandler
      * @param PlayerManager $playerManager
      * @param TableManager $tableManager
      * @param PacketPropagator $propagator
-     * @param FattyConnection $connection
      */
     function __construct(
         PlayerManager $playerManager,
@@ -42,4 +45,35 @@ abstract class AbstractHandler
     }
 
     abstract public function handle();
+
+    /**
+     * @param $name
+     * @param bool $isTemporary
+     * @return Table
+     */
+    protected function newTable($name, $isTemporary = true)
+    {
+        $table = $this->tableManager->createAndAddTable($name, $isTemporary);
+
+        $this->propagator->sendPacketToAll(new NewTable($table));
+
+        return $table;
+    }
+
+    /**
+     * @param Player $player
+     * @param Table $table
+     */
+    protected function playerLeft(Player $player, Table $table)
+    {
+        try {
+            $table->playerLeft($player);
+        } catch(TableAbandonedException $e) {
+            $e->getHandler(
+                $this->playerManager,
+                $this->tableManager,
+                $this->propagator
+            )->handle();
+        }
+    }
 } 

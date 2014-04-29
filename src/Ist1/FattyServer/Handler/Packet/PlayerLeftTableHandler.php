@@ -2,7 +2,6 @@
 
 namespace FattyServer\Handler\Packet;
 
-use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Output\PlayerLeftTable;
 
 
