@@ -193,7 +193,7 @@ class Table
         }
 
         if ($playersCount < 2 || $playersCount - $playersLeftCount == 1) {
-            throw new GameOverException();
+            throw new GameOverException($this);
         }
 
         $this->currentPlayer = $this->players->getNext($this->currentPlayer);

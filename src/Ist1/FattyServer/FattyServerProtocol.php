@@ -128,7 +128,11 @@ class FattyServerProtocol implements FattyComponentInterface
                 $fattyConnFrom
             )->handle();
         } catch (AbstractGameException $exception) {
-
+            $exception->getHandler(
+                $this->playerManager,
+                $this->tableManager,
+                $this->propagator
+            )->handle();
         }
     }
 

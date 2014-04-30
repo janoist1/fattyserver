@@ -2,11 +2,8 @@
 
 namespace FattyServer\Handler\Packet;
 
-use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
-use FattyServer\Exception\GameOverException;
 use FattyServer\FattyConnection;
-use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -131,11 +128,7 @@ class TurnHandler extends AbstractPacketHandler
         }
         if ($nextPlayer === null) {
             // nothing special, next Player in the row turns
-            try {
-                $nextPlayer = $table->turn()->getCurrentPlayer();
-            } catch(GameOverException $e) {
-                // todo: send game end
-            }
+            $nextPlayer = $table->turn()->getCurrentPlayer();
         }
 
         // send Turn packet with next Player, put cards, newly picket cards to the current Player
@@ -161,11 +154,7 @@ class TurnHandler extends AbstractPacketHandler
                 $cardsPickIds = $table->getCards()->getIds();
                 $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
 
-                try {
-                    $nextPlayer = $table->turn()->getCurrentPlayer();
-                } catch(GameOverException $e) {
-                    // todo: send game end
-                }
+                $nextPlayer = $table->turn()->getCurrentPlayer();
 
                 $this->propagator->sendPacketToTable(
                     new Output\Turn($nextPlayer, null, $cardsPickIds, false),
@@ -226,11 +215,7 @@ class TurnHandler extends AbstractPacketHandler
                 $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
             }
 
-            try {
-                $nextPlayer = $table->turn()->getCurrentPlayer();
-            } catch(GameOverException $e) {
-                // todo: send game end
-            }
+            $nextPlayer = $table->turn()->getCurrentPlayer();
 
             $this->propagator->sendPacketToTable(
                 new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, false),
