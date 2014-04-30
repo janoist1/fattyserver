@@ -6,6 +6,7 @@ use FattyServer\Exception\AbstractGameException;
 use FattyServer\Handler\PlayerLeftHandler;
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Packet\Output\Welcome;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 use Ratchet\Wamp\JsonException;
@@ -105,6 +106,11 @@ class FattyServerProtocol implements FattyComponentInterface
      */
     public function onOpen(FattyConnection $conn)
     {
+        $conn->sendPacket(new Welcome(
+            $conn->getId(),
+            \FattyServer\VERSION
+        ));
+
         echo "Connection {$conn->resourceId} has connected\n";
     }
 

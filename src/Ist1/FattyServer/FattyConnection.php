@@ -23,11 +23,6 @@ class FattyConnection extends AbstractConnectionDecorator
         parent::__construct($conn);
 
         $this->id = uniqid();
-
-        $this->sendPacket(new Welcome(
-            $this->id,
-            \FattyServer\VERSION
-        ));
     }
 
     /**
