@@ -24,11 +24,12 @@ class PlayerLeftTableHandler extends AbstractPacketHandler
             return;
         }
 
-        $table->playerLeft($player);
         $player->setReady(false);
         $player->setSwapDone(false);
 
         $this->propagator->sendPacketToAll(new PlayerLeftTable($player));
+
+        $this->playerLeft($player, $table);
 
         if ($player == $table->getCurrentPlayer()) {
             // todo: make a turn instead of the Player

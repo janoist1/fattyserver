@@ -21,8 +21,8 @@ class PlayerLeftHandler extends AbstractPacketHandler
 
         $this->propagator->sendPacketToAll(new PlayerLeft($player));
 
-        if ($table != null && !$table->isPlayerActive($player)) {
-            $table->playerLeft($player);
+        if ($table != null && !$table->isPlayerLeft($player)) {
+            $this->playerLeft($player, $table);
 
             if ($player == $table->getCurrentPlayer()) {
                 // todo: make a turn instead of the Player
