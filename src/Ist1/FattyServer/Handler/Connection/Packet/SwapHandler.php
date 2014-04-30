@@ -1,9 +1,10 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\FattyConnection;
 use FattyServer\Handler\AbstractHandler;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -12,7 +13,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class SwapHandler extends AbstractPacketHandler
+class SwapHandler extends AbstractConnectionHandler
 {
     /**
      * @var Input\Swap

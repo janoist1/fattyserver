@@ -4,14 +4,14 @@ namespace FattyServer\Packet\Input;
 
 use FattyServer\Card\Dealer;
 use FattyServer\FattyConnection;
-use FattyServer\Handler\Packet\PacketHandlerInterface;
-use FattyServer\Handler\Packet\SwapHandler;
+use FattyServer\Handler\Connection\ConnectionHandlerInterface;
+use FattyServer\Handler\Connection\Packet\SwapHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class Swap implements PacketHandlerInterface
+class Swap implements ConnectionHandlerInterface
 {
     /**
      * @var array

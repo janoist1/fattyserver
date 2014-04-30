@@ -1,9 +1,10 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\FattyConnection;
 use FattyServer\Handler\AbstractHandler;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\NewPlayer;
@@ -14,7 +15,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class LoginHandler extends AbstractPacketHandler
+class LoginHandler extends AbstractConnectionHandler
 {
     /**
      * @var Input\Login

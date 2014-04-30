@@ -3,14 +3,14 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
-use FattyServer\Handler\Packet\PacketHandlerInterface;
-use FattyServer\Handler\Packet\PlayerNotReadyHandler;
+use FattyServer\Handler\Connection\ConnectionHandlerInterface;
+use FattyServer\Handler\Connection\Packet\PlayerNotReadyHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class PlayerNotReady implements PacketHandlerInterface {
+class PlayerNotReady implements ConnectionHandlerInterface {
 
     /**
      * @param array $data

@@ -1,6 +1,6 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection;
 
 use FattyServer\FattyConnection;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -9,7 +9,7 @@ use FattyServer\Table\TableManager;
 use FattyServer\Handler\AbstractHandler;
 
 
-interface PacketHandlerInterface
+interface ConnectionHandlerInterface
 {
     /**
      * @param PlayerManager $playerManager

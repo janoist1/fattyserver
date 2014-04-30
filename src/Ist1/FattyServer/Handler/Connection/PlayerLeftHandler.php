@@ -1,12 +1,11 @@
 <?php
 
-namespace FattyServer\Handler;
+namespace FattyServer\Handler\Connection;
 
-use FattyServer\Handler\Packet\AbstractPacketHandler;
 use FattyServer\Packet\Output\PlayerLeft;
 
 
-class PlayerLeftHandler extends AbstractPacketHandler
+class PlayerLeftHandler extends AbstractConnectionHandler
 {
     /**
      * Removes a player and let others know about it.

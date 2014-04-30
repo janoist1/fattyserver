@@ -1,12 +1,13 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\Handler\AbstractHandler;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Output\PlayerNotReady;
 
 
-class PlayerNotReadyHandler extends AbstractPacketHandler
+class PlayerNotReadyHandler extends AbstractConnectionHandler
 {
     /**
      * Handles ReadyNotPlayer request.

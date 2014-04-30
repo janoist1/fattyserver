@@ -1,59 +1,57 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\FattyConnection;
 use FattyServer\Handler\AbstractHandler;
-use FattyServer\Packet\Output\Gathering;
-use FattyServer\Packet\Output\NewTable;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
+use FattyServer\Packet\Input;
+use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\PacketPropagator;
-use FattyServer\Packet\Output\SitDown;
-use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;
-use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 
 
-abstract class AbstractPacketHandler extends AbstractHandler
+class ChatMessageHandler extends AbstractConnectionHandler
 {
     /**
-     * @var FattyConnection
+     * @var Input\ChatMessage
      */
-    protected $connection;
+    protected $packet;
 
     /**
      * @param PlayerManager $playerManager
      * @param TableManager $tableManager
      * @param PacketPropagator $propagator
      * @param FattyConnection $connection
+     * @param Input\ChatMessage $packet
      */
     function __construct(
         PlayerManager $playerManager,
         TableManager $tableManager,
         PacketPropagator $propagator,
-        FattyConnection $connection)
+        FattyConnection $connection,
+        Input\ChatMessage $packet)
     {
         parent::__construct(
             $playerManager,
             $tableManager,
-            $propagator
+            $propagator,
+            $connection
         );
 
-        $this->connection = $connection;
+        $this->packet = $packet;
     }
 
     /**
-     * @param Player $player
-     * @param Table $table
+     * Handles chat message.
      */
-    public function sitDown(Player $player, Table $table)
+    public function handle()
     {
-        $table->getPlayers()->add($player);
-
-        $this->connection->sendPacket(new Gathering($table));
+        $player = $this->playerManager->getPlayers()->getOne($this->connection);
 
         $this->propagator->sendPacketToAll(
-            new SitDown($player, $table)
+            new Output\ChatMessage($player, $this->packet->getMessage())
         );
     }
 } 

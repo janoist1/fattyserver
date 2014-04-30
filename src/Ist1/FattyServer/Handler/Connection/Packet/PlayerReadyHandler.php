@@ -1,15 +1,16 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\FattyConnection;
 use FattyServer\Handler\AbstractHandler;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Output\GameStart;
 use FattyServer\Packet\Output\PlayerReady;
 use FattyServer\Packet\Output\TableReady;
 
 
-class PlayerReadyHandler extends AbstractPacketHandler
+class PlayerReadyHandler extends AbstractConnectionHandler
 {
     /**
      * Handles ReadyPlayer request.

@@ -3,14 +3,14 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
-use FattyServer\Handler\Packet\PacketHandlerInterface;
-use FattyServer\Handler\Packet\TurnHandler;
+use FattyServer\Handler\Connection\ConnectionHandlerInterface;
+use FattyServer\Handler\Connection\Packet\TurnHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class Turn implements PacketHandlerInterface
+class Turn implements ConnectionHandlerInterface
 {
     /**
      * @var array

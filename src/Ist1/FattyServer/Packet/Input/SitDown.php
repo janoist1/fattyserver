@@ -3,14 +3,14 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
-use FattyServer\Handler\Packet\PacketHandlerInterface;
-use FattyServer\Handler\Packet\SitDownHandler;
+use FattyServer\Handler\Connection\ConnectionHandlerInterface;
+use FattyServer\Handler\Connection\Packet\SitDownHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class SitDown implements PacketHandlerInterface {
+class SitDown implements ConnectionHandlerInterface {
 
     /**
      * @var string

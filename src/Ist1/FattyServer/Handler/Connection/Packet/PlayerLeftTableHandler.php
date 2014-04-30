@@ -1,11 +1,12 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Output\PlayerLeftTable;
 
 
-class PlayerLeftTableHandler extends AbstractPacketHandler
+class PlayerLeftTableHandler extends AbstractConnectionHandler
 {
     /**
      * Removes a player from a table and let others know about it.

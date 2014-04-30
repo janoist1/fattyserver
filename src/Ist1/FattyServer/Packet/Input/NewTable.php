@@ -3,15 +3,15 @@
 namespace FattyServer\Packet\Input;
 
 use FattyServer\FattyConnection;
-use FattyServer\Handler\Packet\PacketHandlerInterface;
-use FattyServer\Handler\Packet\LoginHandler;
-use FattyServer\Handler\Packet\NewTableHandler;
+use FattyServer\Handler\Connection\ConnectionHandlerInterface;
+use FattyServer\Handler\Connection\Packet\LoginHandler;
+use FattyServer\Handler\Connection\Packet\NewTableHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class NewTable implements PacketHandlerInterface {
+class NewTable implements ConnectionHandlerInterface {
 
     /**
      * @var string

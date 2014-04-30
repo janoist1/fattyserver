@@ -1,9 +1,10 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\Card\Dealer;
 use FattyServer\FattyConnection;
+use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -11,7 +12,7 @@ use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 
 
-class TurnHandler extends AbstractPacketHandler
+class TurnHandler extends AbstractConnectionHandler
 {
     /**
      * @var Input\Turn

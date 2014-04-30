@@ -1,56 +1,59 @@
 <?php
 
-namespace FattyServer\Handler\Packet;
+namespace FattyServer\Handler\Connection;
 
 use FattyServer\FattyConnection;
 use FattyServer\Handler\AbstractHandler;
-use FattyServer\Packet\Input;
-use FattyServer\Packet\Output;
+use FattyServer\Packet\Output\Gathering;
+use FattyServer\Packet\Output\NewTable;
 use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Packet\Output\SitDown;
+use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;
+use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 
 
-class ChatMessageHandler extends AbstractPacketHandler
+abstract class AbstractConnectionHandler extends AbstractHandler
 {
     /**
-     * @var Input\ChatMessage
+     * @var FattyConnection
      */
-    protected $packet;
+    protected $connection;
 
     /**
      * @param PlayerManager $playerManager
      * @param TableManager $tableManager
      * @param PacketPropagator $propagator
      * @param FattyConnection $connection
-     * @param Input\ChatMessage $packet
      */
     function __construct(
         PlayerManager $playerManager,
         TableManager $tableManager,
         PacketPropagator $propagator,
-        FattyConnection $connection,
-        Input\ChatMessage $packet)
+        FattyConnection $connection)
     {
         parent::__construct(
             $playerManager,
             $tableManager,
-            $propagator,
-            $connection
+            $propagator
         );
 
-        $this->packet = $packet;
+        $this->connection = $connection;
     }
 
     /**
-     * Handles chat message.
+     * @param Player $player
+     * @param Table $table
      */
-    public function handle()
+    public function sitDown(Player $player, Table $table)
     {
-        $player = $this->playerManager->getPlayers()->getOne($this->connection);
+        $table->getPlayers()->add($player);
+
+        $this->connection->sendPacket(new Gathering($table));
 
         $this->propagator->sendPacketToAll(
-            new Output\ChatMessage($player, $this->packet->getMessage())
+            new SitDown($player, $table)
         );
     }
 } 
