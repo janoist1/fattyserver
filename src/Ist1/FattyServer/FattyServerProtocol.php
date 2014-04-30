@@ -3,10 +3,11 @@
 namespace FattyServer;
 
 use FattyServer\Exception\AbstractGameException;
-use FattyServer\Handler\PlayerLeftHandler;
+use FattyServer\Handler\Connection\ConnectionCloseHandler;
+use FattyServer\Handler\Connection\ConnectionOpenHandler;
+use FattyServer\Handler\Connection\PlayerLeftHandler;
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
-use FattyServer\Packet\Output\Welcome;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\TableManager;
 use Ratchet\Wamp\JsonException;
@@ -104,14 +105,15 @@ class FattyServerProtocol implements FattyComponentInterface
     /**
      * {@inheritdoc}
      */
-    public function onOpen(FattyConnection $conn)
+    public function onOpen(FattyConnection $fattyConn)
     {
-        $conn->sendPacket(new Welcome(
-            $conn->getId(),
-            \FattyServer\VERSION
-        ));
-
-        echo "Connection {$conn->resourceId} has connected\n";
+        $handler = new ConnectionOpenHandler(
+            $this->playerManager,
+            $this->tableManager,
+            $this->propagator,
+            $fattyConn
+        );
+        $handler->handle();
     }
 
     /**
@@ -150,16 +152,25 @@ class FattyServerProtocol implements FattyComponentInterface
      */
     public function onClose(FattyConnection $fattyConn)
     {
-        $handler = new PlayerLeftHandler(
+        try {
+            $handler = new PlayerLeftHandler(
+                $this->playerManager,
+                $this->tableManager,
+                $this->propagator,
+                $fattyConn
+            );
+            $handler->handle();
+        } catch (\Exception $e) {
+            // todo: create more specific exception...
+        }
+
+        $handler = new ConnectionCloseHandler(
             $this->playerManager,
             $this->tableManager,
             $this->propagator,
             $fattyConn
         );
-
-        $handler->handle($fattyConn, $this);
-
-        echo "Connection {$fattyConn->resourceId} has disconnected\n";
+        $handler->handle();
     }
 
     /**
