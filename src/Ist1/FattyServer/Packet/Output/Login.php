@@ -60,6 +60,6 @@ class Login extends AbstractOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_LOGIN;
+        return FattyServerProtocol::PACKET_LOGIN;
     }
 } 

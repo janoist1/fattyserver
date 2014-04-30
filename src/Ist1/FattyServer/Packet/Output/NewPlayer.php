@@ -25,6 +25,6 @@ class NewPlayer extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_NEW_PLAYER;
+        return FattyServerProtocol::PACKET_NEW_PLAYER;
     }
 }

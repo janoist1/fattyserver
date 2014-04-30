@@ -14,6 +14,6 @@ class TableClosed extends AbstractTableOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_TABLE_CLOSED;
+        return FattyServerProtocol::PACKET_TABLE_CLOSED;
     }
 } 

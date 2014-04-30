@@ -13,6 +13,6 @@ class PlayerLeft extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PLAYER_LEFT;
+        return FattyServerProtocol::PACKET_PLAYER_LEFT;
     }
 } 

@@ -49,6 +49,6 @@ class Welcome extends AbstractOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_WELCOME;
+        return FattyServerProtocol::PACKET_WELCOME;
     }
 } 

@@ -28,6 +28,6 @@ class NewTable extends AbstractTableOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_NEW_TABLE;
+        return FattyServerProtocol::PACKET_NEW_TABLE;
     }
 } 

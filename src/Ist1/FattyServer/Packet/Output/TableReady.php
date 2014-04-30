@@ -13,6 +13,6 @@ class TableReady extends AbstractTableOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_TABLE_READY;
+        return FattyServerProtocol::PACKET_TABLE_READY;
     }
 } 

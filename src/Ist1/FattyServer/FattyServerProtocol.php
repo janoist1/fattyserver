@@ -45,29 +45,29 @@ use Ratchet\Wamp\JsonException;
  */
 class FattyServerProtocol implements FattyComponentInterface
 {
-    const MSG_WELCOME = 0;
-    const MSG_LOGIN = 1;
-    const MSG_PLAYERS_LIST = 9;
-    const MSG_TABLES_LIST = 12;
-    const MSG_NEW_PLAYER = 3;
-    const MSG_NEW_TABLE = 22;
-    const MSG_SIT_DOWN = 13;
-    const MSG_GATHERING = 2;
-    const MSG_PLAYER_READY = 11;
-    const MSG_PLAYER_NOT_READY = 21;
-    const MSG_GAME_START = 4;
-    const MSG_SWAP = 15;
-    const MSG_SWAP_DONE = 16;
-    const MSG_PUT_CARD = 6;
-    const MSG_TURN = 17;
-    const MSG_PLAYER_WON = 7;
-    const MSG_GAME_END = 8;
-    const MSG_CHAT_MESSAGE = 10;
-    const MSG_PLAYER_LEFT = 14;
-    const MSG_PLAYER_LEFT_TABLE = 18;
-    const MSG_TABLE_CLOSED = 23;
-    const MSG_GAME_ERROR = 19;
-    const MSG_TABLE_READY = 20;
+    const PACKET_WELCOME = 0;
+    const PACKET_LOGIN = 1;
+    const PACKET_PLAYERS_LIST = 9;
+    const PACKET_TABLES_LIST = 12;
+    const PACKET_NEW_PLAYER = 3;
+    const PACKET_NEW_TABLE = 22;
+    const PACKET_SIT_DOWN = 13;
+    const PACKET_GATHERING = 2;
+    const PACKET_PLAYER_READY = 11;
+    const PACKET_PLAYER_NOT_READY = 21;
+    const PACKET_GAME_START = 4;
+    const PACKET_SWAP = 15;
+    const PACKET_SWAP_DONE = 16;
+    const PACKET_PUT_CARD = 6;
+    const PACKET_TURN = 17;
+    const PACKET_PLAYER_WON = 7;
+    const PACKET_GAME_END = 8;
+    const PACKET_CHAT_MESSAGE = 10;
+    const PACKET_PLAYER_LEFT = 14;
+    const PACKET_PLAYER_LEFT_TABLE = 18;
+    const PACKET_TABLE_CLOSED = 23;
+    const PACKET_GAME_ERROR = 19;
+    const PACKET_TABLE_READY = 20;
 
 
     /**

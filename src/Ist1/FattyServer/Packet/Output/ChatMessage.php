@@ -46,6 +46,6 @@ class ChatMessage extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_CHAT_MESSAGE;
+        return FattyServerProtocol::PACKET_CHAT_MESSAGE;
     }
 } 

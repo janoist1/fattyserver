@@ -13,6 +13,6 @@ class PlayerReady extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PLAYER_READY;
+        return FattyServerProtocol::PACKET_PLAYER_READY;
     }
 } 

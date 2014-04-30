@@ -41,6 +41,6 @@ class SitDown extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_SIT_DOWN;
+        return FattyServerProtocol::PACKET_SIT_DOWN;
     }
 }

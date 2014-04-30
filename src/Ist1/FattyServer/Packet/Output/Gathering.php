@@ -13,6 +13,6 @@ class Gathering extends AbstractTableOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_GATHERING;
+        return FattyServerProtocol::PACKET_GATHERING;
     }
 } 

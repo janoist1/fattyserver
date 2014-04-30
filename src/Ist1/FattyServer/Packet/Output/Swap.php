@@ -27,6 +27,6 @@ class Swap extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_SWAP;
+        return FattyServerProtocol::PACKET_SWAP;
     }
 } 

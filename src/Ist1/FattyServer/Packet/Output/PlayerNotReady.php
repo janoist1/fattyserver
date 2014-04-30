@@ -12,6 +12,6 @@ class PlayerNotReady extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PLAYER_NOT_READY;
+        return FattyServerProtocol::PACKET_PLAYER_NOT_READY;
     }
 } 

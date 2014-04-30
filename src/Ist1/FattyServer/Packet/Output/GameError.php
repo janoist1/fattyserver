@@ -45,6 +45,6 @@ class GameError extends AbstractOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_GAME_ERROR;
+        return FattyServerProtocol::PACKET_GAME_ERROR;
     }
 } 

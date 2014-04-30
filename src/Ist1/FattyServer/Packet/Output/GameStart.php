@@ -60,6 +60,6 @@ class GameStart extends AbstractOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_GAME_START;
+        return FattyServerProtocol::PACKET_GAME_START;
     }
 } 

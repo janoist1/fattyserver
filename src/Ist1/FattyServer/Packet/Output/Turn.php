@@ -57,6 +57,6 @@ class Turn extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_TURN;
+        return FattyServerProtocol::PACKET_TURN;
     }
 } 

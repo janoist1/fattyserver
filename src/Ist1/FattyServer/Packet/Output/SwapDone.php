@@ -16,6 +16,6 @@ class SwapDone extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_SWAP_DONE;
+        return FattyServerProtocol::PACKET_SWAP_DONE;
     }
 } 

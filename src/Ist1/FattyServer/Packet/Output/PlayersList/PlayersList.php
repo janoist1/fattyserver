@@ -25,6 +25,6 @@ class PlayersList extends AbstractPlayersList
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PLAYERS_LIST;
+        return FattyServerProtocol::PACKET_PLAYERS_LIST;
     }
 } 

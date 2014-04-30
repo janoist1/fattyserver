@@ -13,6 +13,6 @@ class PlayerLeftTable extends AbstractPlayerOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_PLAYER_LEFT_TABLE;
+        return FattyServerProtocol::PACKET_PLAYER_LEFT_TABLE;
     }
 } 

@@ -26,39 +26,39 @@ class InputPacketMapper {
         }
 
         switch ($array[self::TYPE_KEY]) {
-            case FattyServerProtocol::MSG_LOGIN:
+            case FattyServerProtocol::PACKET_LOGIN:
                 return new Login($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_NEW_TABLE:
+            case FattyServerProtocol::PACKET_NEW_TABLE:
                 return new NewTable($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_SIT_DOWN:
+            case FattyServerProtocol::PACKET_SIT_DOWN:
                 return new SitDown($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_PLAYER_READY:
+            case FattyServerProtocol::PACKET_PLAYER_READY:
                 return new PlayerReady();
                 break;
 
-            case FattyServerProtocol::MSG_PLAYER_NOT_READY:
+            case FattyServerProtocol::PACKET_PLAYER_NOT_READY:
                 return new PlayerNotReady();
                 break;
 
-            case FattyServerProtocol::MSG_PLAYER_LEFT_TABLE:
+            case FattyServerProtocol::PACKET_PLAYER_LEFT_TABLE:
                 return new PlayerLeftTable();
                 break;
 
-            case FattyServerProtocol::MSG_SWAP:
+            case FattyServerProtocol::PACKET_SWAP:
                 return new Swap($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_TURN:
+            case FattyServerProtocol::PACKET_TURN:
                 return new Turn($array[self::DATA_KEY]);
                 break;
 
-            case FattyServerProtocol::MSG_CHAT_MESSAGE:
+            case FattyServerProtocol::PACKET_CHAT_MESSAGE:
                 return new ChatMessage($array[self::DATA_KEY]);
                 break;
 

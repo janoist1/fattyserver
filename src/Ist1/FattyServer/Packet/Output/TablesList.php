@@ -38,7 +38,7 @@ class TablesList extends AbstractListOutputPacket
      */
     public function getType()
     {
-        return FattyServerProtocol::MSG_TABLES_LIST;
+        return FattyServerProtocol::PACKET_TABLES_LIST;
     }
 
     /**
