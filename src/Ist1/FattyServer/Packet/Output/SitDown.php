@@ -16,6 +16,7 @@ class SitDown extends AbstractPlayerOutputPacket
 
     /**
      * @param Player $player
+     * @param Table $table
      */
     function __construct(Player $player, Table $table)
     {
