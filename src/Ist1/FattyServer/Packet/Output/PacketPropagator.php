@@ -37,7 +37,7 @@ class PacketPropagator
      *
      * @param AbstractOutputPacket $packet
      */
-    public function sendPacketToPlayers(
+    public function sendPacketToAll(
         AbstractOutputPacket $packet,
         FattyConnection $exclude = null)
     {
