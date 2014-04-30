@@ -22,18 +22,7 @@ class TableManager
     {
         $this->tables = new \SplObjectStorage();
 
-        $this->createAndAddTable(self::DEFAULT_TABLE_NAME);
-    }
-
-    /**
-     * Creates and returns a Table.
-     *
-     * @param $name
-     * @return Table
-     */
-    public static function createTable($name)
-    {
-        return new Table($name);
+        $this->createAndAddTable(self::DEFAULT_TABLE_NAME, false);
     }
 
     /**
@@ -69,11 +58,13 @@ class TableManager
      * and returns the new Table.
      *
      * @param $name
+     * @param bool $isTemporary
      * @return Table
      */
-    public function createAndAddTable($name)
+    public function createAndAddTable($name, $isTemporary = true)
     {
-        $table = self::createTable($name);
+        $table = new Table($name, $isTemporary);
+
         $this->addTable($table);
 
         return $table;
@@ -98,6 +89,24 @@ class TableManager
     }
 
     /**
+     * Returns a Table by its name
+     *
+     * @param string $name
+     * @return Table
+     */
+    public function getTableByName($name)
+    {
+        /** @var Table $table */
+        foreach ($this->tables as $table) {
+            if ($table->getName() == $name) {
+                return $table;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns a Table by a FattyConnection
      *
      * @param Player $player
@@ -107,6 +116,7 @@ class TableManager
     {
         /** @var Table $table */
         foreach ($this->tables as $table) {
+            // todo: check if Player has finished
             if ($table->getPlayers()->getAll()->contains($player->getConnection())) {
                 return $table;
             }

@@ -6,6 +6,7 @@ use FattyServer\Card\Card;
 use FattyServer\Card\CardStorage;
 use FattyServer\Card\Dealer;
 use FattyServer\Exception\GameOverException;
+use FattyServer\Exception\TableAbandonedException;
 use FattyServer\Player\Player;
 use FattyServer\Player\PlayerStorage;
 
@@ -21,6 +22,11 @@ class Table
      * @var string
      */
     protected $name;
+
+    /**
+     * @var bool
+     */
+    protected $isTemporary;
 
     /**
      * @var bool
@@ -64,11 +70,22 @@ class Table
 
     /**
      * @param $name
+     * @param $isTemporary
      */
-    function __construct($name)
+    function __construct($name, $isTemporary = true)
     {
         $this->id = uniqid();
         $this->name = $name;
+        $this->isTemporary = $isTemporary;
+
+        $this->reset();
+    }
+
+    /**
+     * Resets Table.
+     */
+    function reset()
+    {
         $this->isReady = false;
         $this->isSwapDone = false;
         $this->dealer = new Dealer();
@@ -92,6 +109,14 @@ class Table
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTemporary()
+    {
+        return $this->isTemporary;
     }
 
     /**
@@ -226,6 +251,10 @@ class Table
             $this->playersLeft->add($player);
         } else {
             $this->players->remove($player);
+        }
+
+        if ($this->players->getAll()->count() - $this->playersLeft->getAll()->count() < 1) {
+            throw new TableAbandonedException($this);
         }
     }
 

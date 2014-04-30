@@ -3,7 +3,6 @@
 namespace FattyServer;
 
 use FattyServer\Exception\AbstractGameException;
-use FattyServer\Exception\GameOverException;
 use FattyServer\Handler\PlayerLeftHandler;
 use FattyServer\Packet\Input\InputPacketMapper;
 use FattyServer\Packet\Output\PacketPropagator;
@@ -23,6 +22,7 @@ use Ratchet\Wamp\JsonException;
  * | PLAYERS_LIST       | 9  | Server-to-Client |
  * | TABLES_LIST        | 12 | Server-to-Client |
  * | NEW_PLAYER         | 3  | Server-to-Client |
+ * | NEW_TABLE          | 22 | Server-to-Client |
  * | SIT_DOWN           | 13 | Bi-Directional   |
  * | GATHERING          | 2  | Server-to-Client |
  * | PLAYER_READY       | 11 | Bi-Directional   |
@@ -48,6 +48,7 @@ class FattyServerProtocol implements FattyComponentInterface
     const MSG_PLAYERS_LIST = 9;
     const MSG_TABLES_LIST = 12;
     const MSG_NEW_PLAYER = 3;
+    const MSG_NEW_TABLE = 22;
     const MSG_SIT_DOWN = 13;
     const MSG_GATHERING = 2;
     const MSG_PLAYER_READY = 11;
