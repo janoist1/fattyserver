@@ -27,7 +27,7 @@ class TablesList extends AbstractListOutputPacket
         }
 
         return array(
-            'id' => $table->getId(),
+            'table_id' => $table->getId(),
             'name' => $table->getName(),
             'players' => $players
         );
