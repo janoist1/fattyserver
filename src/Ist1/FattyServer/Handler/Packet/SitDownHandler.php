@@ -8,7 +8,9 @@ use FattyServer\Packet\Input;
 use FattyServer\Packet\Output;
 use FattyServer\Packet\Output\Gathering;
 use FattyServer\Packet\Output\PacketPropagator;
+use FattyServer\Player\Player;
 use FattyServer\Player\PlayerManager;
+use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
 
 
@@ -75,12 +77,6 @@ class SitDownHandler extends AbstractPacketHandler
             return;
         }
 
-        $table->getPlayers()->add($player);
-
-        $this->connection->sendPacket(new Gathering($table));
-
-        $this->propagator->sendPacketToAll(
-            new Output\SitDown($player, $table)
-        );
+        $this->sitDown($player, $table);
     }
 } 
