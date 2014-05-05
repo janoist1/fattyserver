@@ -18,7 +18,7 @@ class PlayerLeftHandler extends AbstractConnectionHandler
         $player->setConnected(false);
         $this->playerManager->getPlayers()->remove($player);
 
-        $this->propagator->sendPacketToAll(new PlayerLeft($player));
+        $this->propagator->sendPacket(new PlayerLeft($player));
 
         if ($table != null && !$table->isPlayerLeft($player)) {
             $this->playerLeft($player, $table);

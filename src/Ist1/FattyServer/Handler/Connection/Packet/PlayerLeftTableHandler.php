@@ -28,7 +28,7 @@ class PlayerLeftTableHandler extends AbstractConnectionHandler
         $player->setReady(false);
         $player->setSwapDone(false);
 
-        $this->propagator->sendPacketToAll(new PlayerLeftTable($player));
+        $this->propagator->sendPacket(new PlayerLeftTable($player));
 
         $this->playerLeft($player, $table);
 

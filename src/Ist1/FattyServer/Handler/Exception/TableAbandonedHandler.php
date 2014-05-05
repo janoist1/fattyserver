@@ -42,7 +42,7 @@ class TableAbandonedHandler extends AbstractHandler
     public function handle()
     {
         if ($this->table->isTemporary()) {
-            $this->propagator->sendPacketToAll(new TableClosed($this->table));
+            $this->propagator->sendPacket(new TableClosed($this->table));
             $this->tableManager->removeTable($this->table);
             unset($this->table);
         } else {

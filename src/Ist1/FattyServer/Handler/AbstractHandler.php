@@ -55,7 +55,7 @@ abstract class AbstractHandler
     {
         $table = $this->tableManager->createAndAddTable($name, $isTemporary);
 
-        $this->propagator->sendPacketToAll(new NewTable($table));
+        $this->propagator->sendPacket(new NewTable($table));
 
         return $table;
     }

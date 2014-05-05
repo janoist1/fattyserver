@@ -44,14 +44,14 @@ class GameOverHandler extends AbstractHandler
         $this->tableManager->removeTable($this->table);
 
         if ($this->table->isTemporary()) {
-            $this->propagator->sendPacketToAll(new TableClosed($this->table));
+            $this->propagator->sendPacket(new TableClosed($this->table));
 
             unset($this->table);
 
             if ($this->tableManager->getTables()->count() < 1) {
                 $table = $this->tableManager->createAndAddTable(TableManager::DEFAULT_TABLE_NAME);
 
-                $this->propagator->sendPacketToAll(new NewTable($table));
+                $this->propagator->sendPacket(new NewTable($table));
             }
         }
     }

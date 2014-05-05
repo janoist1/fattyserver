@@ -68,7 +68,7 @@ class LoginHandler extends AbstractConnectionHandler
         $this->connection->sendPacket(
             new PlayersList($this->playerManager->getPlayers()->getAll())
         );
-        $this->propagator->sendPacketToAll(
+        $this->propagator->sendPacket(
             new NewPlayer($player),
             $this->connection
         );

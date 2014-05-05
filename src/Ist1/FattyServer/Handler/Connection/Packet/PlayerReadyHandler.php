@@ -31,11 +31,11 @@ class PlayerReadyHandler extends AbstractConnectionHandler
         }
 
         $player->setReady(true);
-        $this->propagator->sendPacketToAll(new PlayerReady($player));
+        $this->propagator->sendPacket(new PlayerReady($player));
 
 
         if ($table->isReady()) {
-            $this->propagator->sendPacketToAll(new TableReady($table));
+            $this->propagator->sendPacket(new TableReady($table));
             $players = clone $table->getPlayers()->getAll();
 
             $table->getDealer()->deal($players);

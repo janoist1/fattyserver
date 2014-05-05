@@ -52,7 +52,7 @@ abstract class AbstractConnectionHandler extends AbstractHandler
 
         $this->connection->sendPacket(new Gathering($table));
 
-        $this->propagator->sendPacketToAll(
+        $this->propagator->sendPacket(
             new SitDown($player, $table)
         );
     }

@@ -33,6 +33,6 @@ class PlayerNotReadyHandler extends AbstractConnectionHandler
 
         $player->setReady(false);
 
-        $this->propagator->sendPacketToAll(new PlayerNotReady($player));
+        $this->propagator->sendPacket(new PlayerNotReady($player));
     }
 }
