@@ -64,10 +64,10 @@ class LoginHandler extends AbstractConnectionHandler
         $tables = $this->tableManager->getTables();
 
         $this->connection->sendPacket(new Output\Login());
-        $this->connection->sendPacket(new TablesList($tables));
         $this->connection->sendPacket(
             new PlayersList($this->playerManager->getPlayers()->getAll())
         );
+        $this->connection->sendPacket(new TablesList($tables));
         $this->propagator->sendPacket(
             new NewPlayer($player),
             $this->connection

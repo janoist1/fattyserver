@@ -17,6 +17,7 @@ class PlayersList extends AbstractPlayersList
         return array(
             'player_id' => $player->getId(),
             'name' => $player->getName(),
+            'is_ready' => $player->isReady(),
         );
     }
 

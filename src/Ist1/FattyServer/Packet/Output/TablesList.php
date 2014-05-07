@@ -15,21 +15,19 @@ class TablesList extends AbstractListOutputPacket
      */
     public function getItemData($table)
     {
-        $players = array();
+        $playerIds = array();
 
         foreach ($table->getPlayers()->getAll() as $conn) {
             /** @var Player $player */
             $player = $table->getPlayers()->getOne($conn);
-            $players[] = array(
-                'player_id' => $player->getId(),
-                'is_ready' => $player->isReady()
-            );
+            $playerIds[] = $player->getId();
         }
 
         return array(
             'table_id' => $table->getId(),
             'name' => $table->getName(),
-            'players' => $players
+            'player_ids' => $playerIds,
+            'is_ready' => $table->isReady(),
         );
     }
 

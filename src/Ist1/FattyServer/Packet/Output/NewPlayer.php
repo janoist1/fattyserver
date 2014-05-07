@@ -14,7 +14,8 @@ class NewPlayer extends AbstractPlayerOutputPacket
     public function getData()
     {
         $data = array(
-            'name' => $this->player->getName()
+            'name' => $this->player->getName(),
+            'is_ready' => false,
         );
 
         return array_merge(parent::getData(), $data);
