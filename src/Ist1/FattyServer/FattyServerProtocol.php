@@ -42,6 +42,7 @@ use Ratchet\Wamp\JsonException;
  * | TABLE_CLOSED       | 23 | Server-to-Client |
  * | GAME_ERROR         | 19 | Server-to-Client |
  * | TABLE_READY        | 20 | Server-to-Client |
+ * | TABLE_RESET        | 24 | Server-to-Client |
  * +--------------------+----+------------------+
  */
 class FattyServerProtocol implements FattyComponentInterface
@@ -69,6 +70,7 @@ class FattyServerProtocol implements FattyComponentInterface
     const PACKET_TABLE_CLOSED = 23;
     const PACKET_GAME_ERROR = 19;
     const PACKET_TABLE_READY = 20;
+    const PACKET_TABLE_RESET = 24;
 
 
     /**

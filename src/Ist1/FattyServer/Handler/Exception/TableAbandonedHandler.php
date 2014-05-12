@@ -5,6 +5,7 @@ namespace FattyServer\Handler\Exception;
 use FattyServer\Handler\AbstractHandler;
 use FattyServer\Packet\Output\PacketPropagator;
 use FattyServer\Packet\Output\TableClosed;
+use FattyServer\Packet\Output\TableReset;
 use FattyServer\Player\PlayerManager;
 use FattyServer\Table\Table;
 use FattyServer\Table\TableManager;
@@ -47,6 +48,7 @@ class TableAbandonedHandler extends AbstractHandler
             unset($this->table);
         } else {
             $this->table->reset();
+            $this->propagator->sendPacket(new TableReset($this->table));
         }
     }
 } 
