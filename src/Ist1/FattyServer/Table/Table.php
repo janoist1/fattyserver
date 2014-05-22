@@ -66,7 +66,7 @@ class Table
     /**
      * @var Player
      */
-    protected $currentPlayer;
+    protected $activePlayer;
 
     /**
      * @param $name
@@ -130,17 +130,17 @@ class Table
     /**
      * @param Player $currentPlayer
      */
-    public function setCurrentPlayer($currentPlayer)
+    public function setActivePlayer($currentPlayer)
     {
-        $this->currentPlayer = $currentPlayer;
+        $this->activePlayer = $currentPlayer;
     }
 
     /**
      * @return Player
      */
-    public function getCurrentPlayer()
+    public function getActivePlayer()
     {
-        return $this->currentPlayer;
+        return $this->activePlayer;
     }
 
     /**
@@ -221,7 +221,7 @@ class Table
             throw new GameOverException($this);
         }
 
-        $this->currentPlayer = $this->players->getNext($this->currentPlayer);
+        $this->activePlayer = $this->players->getNext($this->activePlayer);
 
         return $this;
     }

@@ -57,7 +57,7 @@ class TurnHandler extends AbstractConnectionHandler
             // todo: handle Player is not playing
             return;
         }
-        if ($table->getCurrentPlayer() != $player) {
+        if ($table->getActivePlayer() != $player) {
             // todo: handle wrong turn
             return;
         }
@@ -129,7 +129,7 @@ class TurnHandler extends AbstractConnectionHandler
         }
         if ($nextPlayer === null) {
             // nothing special, next Player in the row turns
-            $nextPlayer = $table->turn()->getCurrentPlayer();
+            $nextPlayer = $table->turn()->getActivePlayer();
         }
 
         // send Turn packet with next Player, put cards, newly picket cards to the current Player
@@ -155,7 +155,7 @@ class TurnHandler extends AbstractConnectionHandler
                 $cardsPickIds = $table->getCards()->getIds();
                 $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
 
-                $nextPlayer = $table->turn()->getCurrentPlayer();
+                $nextPlayer = $table->turn()->getActivePlayer();
 
                 $this->propagator->sendPacketToTable(
                     new Output\Turn($nextPlayer, null, $cardsPickIds, false),
@@ -216,7 +216,7 @@ class TurnHandler extends AbstractConnectionHandler
                 $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
             }
 
-            $nextPlayer = $table->turn()->getCurrentPlayer();
+            $nextPlayer = $table->turn()->getActivePlayer();
 
             $this->propagator->sendPacketToTable(
                 new Output\Turn($nextPlayer, $cardsPutIds, $cardsPickIds, false),

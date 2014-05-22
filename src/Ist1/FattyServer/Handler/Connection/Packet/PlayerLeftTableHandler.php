@@ -32,7 +32,7 @@ class PlayerLeftTableHandler extends AbstractConnectionHandler
 
         $this->playerLeft($player, $table);
 
-        if ($player == $table->getCurrentPlayer()) {
+        if ($player == $table->getActivePlayer()) {
             // todo: make a turn instead of the Player
         }
     }
