@@ -79,6 +79,8 @@ class SwapHandler extends AbstractConnectionHandler
                 new SwapDone($player),
                 $table
             );
+
+            $table->setCurrentPlayer($player);
         }
     }
 } 
