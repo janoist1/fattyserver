@@ -151,7 +151,7 @@ class CardStorage
         $value = end($this->cards)->getValue();
 
         /** @var Card $card */
-        while ($card = prev($this->cards) && $card->getValue() == $value) {
+        while (($card = prev($this->cards)) !== false && $card->getValue() == $value) {
             $count++;
         };
 
