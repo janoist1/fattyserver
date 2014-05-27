@@ -35,7 +35,7 @@ class Dealer
     /**
      * Deals Cards for each Player at the given Table
      *
-     * @param Table $table
+     * @param \Iterator $players
      */
     public function deal(\Iterator $players)
     {
