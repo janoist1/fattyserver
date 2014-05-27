@@ -70,12 +70,12 @@ class TurnHandler extends AbstractConnectionHandler
             // player has cards in hand or face-up on the table
             $cardsPutIds = $this->packet->getCards();
             $cardStorage = $cardsHandCount ? $player->getCardsHand() : $player->getCardsUp();
-            $cardValue = $cardStorage->getById($cardsPutIds[0])->getValue();
+            $card = $cardStorage->getById($cardsPutIds[0]);
 
             // todo: check if cards to put are in the storage
 
-            if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) { // todo: implement the 8 rule
-                // card passed, player picks from the deck if there are any
+            if (Dealer::checkPass($card, $table->getCards())) {
+                // card passed, transfer cards to the table
                 $cardStorage->transferByIdsTo($cardsPutIds, $table->getCards());
 
                 // pick from the deck if there is any
@@ -92,9 +92,8 @@ class TurnHandler extends AbstractConnectionHandler
         } else {
             // if the player has cards only face-down on the table (3 random cards)
             $card = reset($player->getCardsDown()->randomPick(1));
-            $cardValue = $card->getValue();
 
-            if (Dealer::checkPass($cardValue, $table->getCards()->getLastCard()->getValue())) {
+            if (Dealer::checkPass($card, $table->getCards())) {
                 // the Player can put the randomly picket card
                 $table->getCards()->add($card);
                 $cardsPutIds = array($card->getId());
@@ -109,7 +108,7 @@ class TurnHandler extends AbstractConnectionHandler
 
         // let's get the next Player
         $nextPlayer = null;
-        $burn = Dealer::checkBurn($cardValue, $table->getCards());
+        $burn = Dealer::checkBurn($card, $table->getCards());
 
         if ($burn) {
             $table->getCards()->removeAll();
@@ -118,7 +117,7 @@ class TurnHandler extends AbstractConnectionHandler
                 // Player burned but hasn't finished playing
                 $nextPlayer = $player;
             }
-        } elseif ($cardValue == Dealer::RULE_ACE_VALUE) {
+        } elseif ($card->getValue() == Dealer::RULE_ACE_VALUE) {
             // Player has an Ace so can choose the next one
             $nextPlayer = $table->getPlayers()->getById($this->packet->getPlayerId());
 
@@ -151,7 +150,7 @@ class TurnHandler extends AbstractConnectionHandler
                 : $nextPlayer->getCardsUp();
 
             // if the next Player is unable to put a valid card, has to pick up all
-            if (!Dealer::checkCardsPass($cardStorage, $cardValue)) {
+            if (!Dealer::checkAnyPass($cardStorage, $table->getCards())) {
                 $cardsPickIds = $table->getCards()->getIds();
                 $table->getCards()->transferAllTo($nextPlayer->getCardsHand());
 
@@ -193,7 +192,7 @@ class TurnHandler extends AbstractConnectionHandler
 
             // get the first available card
             while (($card = $cardStorage->getCardAt($cardIndex++)) !== null
-                && Dealer::checkPass($card->getValue(), $table->getCards()->getLastCard()->getValue())) ;
+                && Dealer::checkPass($card, $table->getCards())) ;
 
             if ($card != null) {
                 // there was valid card to put

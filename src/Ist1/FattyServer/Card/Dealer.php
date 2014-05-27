@@ -49,35 +49,46 @@ class Dealer
     }
 
     /**
-     * @param $value
-     * @param $lastValue
+     * Checks if a Card passed
+     *
+     * @param Card $subject
+     * @param CardStorage $storage
      * @return bool
      */
-    public static function checkPass($value, $lastValue)
+    public static function checkPass(Card $subject, CardStorage $storage)
     {
-        switch ($value) {
-            case Dealer::RULE_2_VALUE:
-            case Dealer::RULE_8_VALUE:
-            case Dealer::RULE_10_VALUE:
-            case Dealer::RULE_ACE_VALUE:
-                return $lastValue != Dealer::RULE_9_VALUE;
-                break;
+        $i = $storage->count();
+        while ($card = $storage->getCardAt(--$i)) {
+            if ($card->getValue() != Dealer::RULE_8_VALUE) {
+                switch ($subject->getValue()) {
+                    case Dealer::RULE_2_VALUE:
+                    case Dealer::RULE_8_VALUE:
+                    case Dealer::RULE_10_VALUE:
+                    case Dealer::RULE_ACE_VALUE:
+                        return $card->getValue() != Dealer::RULE_9_VALUE;
+                        break;
 
-            default:
-                return $value >= $lastValue;
+                    default:
+                        return $subject->getValue() >= $card->getValue();
+                }
+            }
         }
+
+        return true;
     }
 
     /**
-     * @param CardStorage $cardStorage
-     * @param $lastValue
+     * Checks if any of the given Cards passed
+     *
+     * @param CardStorage $subject
+     * @param CardStorage $storage
      * @return bool
      */
-    public static function checkCardsPass(CardStorage $cardStorage, $lastValue)
+    public static function checkAnyPass(CardStorage $subject, CardStorage $storage)
     {
         /** @var Card $card */
-        foreach ($cardStorage->getAll() as $card) {
-            if (self::checkPass($card->getValue(), $lastValue)) {
+        foreach ($subject->getAll() as $card) {
+            if (self::checkPass($card, $storage)) {
                 return true;
             }
         }
@@ -86,13 +97,13 @@ class Dealer
     }
 
     /**
-     * @param $value
+     * @param Card $card
      * @param CardStorage $cards
      * @return bool
      */
-    public static function checkBurn($value, CardStorage $cards)
+    public static function checkBurn(Card $card, CardStorage $cards)
     {
-        return $value == self::RULE_10_VALUE || $cards->countLastValue() == self::RULE_BURN_COUNT;
+        return $card->getValue() == self::RULE_10_VALUE || $cards->countLastValue() == self::RULE_BURN_COUNT;
     }
 
     /**
@@ -123,7 +134,7 @@ class Dealer
      * Generates N dummy Cards
      *
      * @param int $num
-     * @return array|Card
+     * @return array
      */
     public static function generateDummy($num = 1)
     {
@@ -134,7 +145,7 @@ class Dealer
             $cards[$card->getId()] = $card;
         }
 
-        return count($cards) > 1 ? $cards : array_shift($cards);
+        return $cards;
     }
 
     /**

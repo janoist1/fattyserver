@@ -119,14 +119,6 @@ class CardStorage
     /**
      * @return Card
      */
-    public function getLastCard()
-    {
-        return end($this->cards);
-    }
-
-    /**
-     * @return Card
-     */
     public function getCardAt($index)
     {
         if ($index >= $this->count()) {
