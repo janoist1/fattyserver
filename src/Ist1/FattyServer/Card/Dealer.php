@@ -59,17 +59,19 @@ class Dealer
     {
         $i = $storage->count();
         while ($card = $storage->getCardAt(--$i)) {
-            if ($card->getValue() != Dealer::RULE_8_VALUE) {
+            if ($card->getValue() != self::RULE_8_VALUE) {
                 switch ($subject->getValue()) {
-                    case Dealer::RULE_2_VALUE:
-                    case Dealer::RULE_8_VALUE:
-                    case Dealer::RULE_10_VALUE:
-                    case Dealer::RULE_ACE_VALUE:
-                        return $card->getValue() != Dealer::RULE_9_VALUE;
+                    case self::RULE_2_VALUE:
+                    case self::RULE_8_VALUE:
+                    case self::RULE_10_VALUE:
+                    case self::RULE_ACE_VALUE:
+                        return $card->getValue() != self::RULE_9_VALUE;
                         break;
 
                     default:
-                        return $subject->getValue() >= $card->getValue();
+                        return $card->getValue() == self::RULE_9_VALUE
+                            ? $subject->getValue() < self::RULE_9_VALUE
+                            : $subject->getValue() >= $card->getValue() && $card->getValue() != self::RULE_ACE_VALUE;
                 }
             }
         }
