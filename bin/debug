@@ -1,0 +1,1 @@
+XDEBUG_CONFIG="idekey=PHPSTORMCMD" PHP_IDE_CONFIG="serverName=damfatty.dev" php -dxdebug.remote_host=`echo $SSH_CLIENT | cut -d "=" -f 2 | awk '{print $1}'` bin/run.php
