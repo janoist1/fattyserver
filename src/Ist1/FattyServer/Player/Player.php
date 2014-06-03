@@ -74,6 +74,16 @@ class Player
     }
 
     /**
+     * Returns true if Player has Cards only face-down
+     *
+     * @return bool
+     */
+    public function hasToPutRandomly()
+    {
+        return $this->cardsHand->count() < 1 && $this->cardsUp->count() < 1;
+    }
+
+    /**
      * @return FattyConnection
      */
     public function getConnection()
