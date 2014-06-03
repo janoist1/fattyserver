@@ -3,6 +3,7 @@
 namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\Card\Dealer;
+use FattyServer\Exception\RuleViolation\CardNotValidException;
 use FattyServer\FattyConnection;
 use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
@@ -73,6 +74,12 @@ class TurnHandler extends AbstractConnectionHandler
             $card = $cardStorage->getById($cardsPutIds[0]);
 
             // todo: check if cards to put are in the storage
+            if (!$cardStorage->hasIds($cardsPutIds)) {
+                throw new CardNotValidException($player);
+            }
+            if (!Dealer::checkPass($card, $table->getCards())) {
+                throw new CardNotValidException($player);
+            }
 
             if (Dealer::checkPass($card, $table->getCards())) {
                 // card passed, transfer cards to the table
