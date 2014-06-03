@@ -161,6 +161,21 @@ class CardStorage
     }
 
     /**
+     * @param array $ids
+     * @return bool
+     */
+    public function hasIds(array $ids)
+    {
+        foreach ($ids as $id) {
+            if (!$this->hasId($id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $id
      * @return Card
      */
