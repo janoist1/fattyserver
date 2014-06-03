@@ -49,6 +49,31 @@ class Dealer
     }
 
     /**
+     * Picks maximum N cards according to the rules
+     * and transfers them to the given storage
+     * Returns the Card IDs transferred
+     *
+     * @param CardStorage $storage
+     * @return array
+     */
+    public function pickIfNecessary(CardStorage $storage)
+    {
+        $ids = array();
+
+        if ($this->getCards()->count()) {
+            $cardsPick = $this->getCards()->randomPick(
+                max(self::RULE_CARDS_HAND - $storage->count(), 0)
+            );
+
+            $storage->addArray($cardsPick);
+
+            $ids = array_keys($cardsPick);
+        }
+
+        return $ids;
+    }
+
+    /**
      * Checks if a Card passed
      *
      * @param Card $subject
