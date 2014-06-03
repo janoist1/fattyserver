@@ -6,6 +6,7 @@ use FattyServer\Card\Dealer;
 use FattyServer\Exception\RuleViolation\CardNotValidException;
 use FattyServer\Exception\RuleViolation\PlayerNotValidException;
 use FattyServer\Exception\RuleViolation\WrongTableException;
+use FattyServer\Exception\RuleViolation\WrongTurnException;
 use FattyServer\FattyConnection;
 use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
@@ -60,8 +61,7 @@ class TurnHandler extends AbstractConnectionHandler
             throw new WrongTableException($player);
         }
         if ($table->getActivePlayer() != $player) {
-            // todo: handle wrong turn
-            return;
+            throw new WrongTurnException($player);
         }
 
         $cardsPutIds = array();
