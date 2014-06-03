@@ -4,6 +4,7 @@ namespace FattyServer\Handler\Connection\Packet;
 
 use FattyServer\Card\Dealer;
 use FattyServer\Exception\RuleViolation\CardNotValidException;
+use FattyServer\Exception\RuleViolation\PlayerNotValidException;
 use FattyServer\FattyConnection;
 use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
@@ -128,9 +129,14 @@ class TurnHandler extends AbstractConnectionHandler
             // Player has an Ace so can choose the next one
             $nextPlayer = $table->getPlayers()->getById($this->packet->getPlayerId());
 
+            if ($nextPlayer == null) {
+                throw new PlayerNotValidException($player);
+            }
+            if ($nextPlayer == $player) {
+                throw new PlayerNotValidException($player);
+            }
             if ($table->isPlayerFinished($nextPlayer)) {
-                // todo: handle player already finished, can't turn
-                return;
+                throw new PlayerNotValidException($player);
             }
         }
         if ($nextPlayer === null) {
