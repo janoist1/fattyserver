@@ -5,6 +5,7 @@ namespace FattyServer\Handler\Connection\Packet;
 use FattyServer\Card\Dealer;
 use FattyServer\Exception\RuleViolation\CardNotValidException;
 use FattyServer\Exception\RuleViolation\PlayerNotValidException;
+use FattyServer\Exception\RuleViolation\WrongTableException;
 use FattyServer\FattyConnection;
 use FattyServer\Handler\Connection\AbstractConnectionHandler;
 use FattyServer\Packet\Input;
@@ -56,8 +57,7 @@ class TurnHandler extends AbstractConnectionHandler
         $table = $this->tableManager->getTableByPlayer($player);
 
         if (!$table->hasPlayer($player)) {
-            // todo: handle Player is not playing
-            return;
+            throw new WrongTableException($player);
         }
         if ($table->getActivePlayer() != $player) {
             // todo: handle wrong turn
