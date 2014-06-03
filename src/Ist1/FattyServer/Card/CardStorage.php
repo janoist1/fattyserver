@@ -117,11 +117,12 @@ class CardStorage
     }
 
     /**
+     * @param $index
      * @return Card
      */
     public function getCardAt($index)
     {
-        if ($index >= $this->count()) {
+        if ($index < 0 || $index >= $this->count()) {
             return null;
         }
 
